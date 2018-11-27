@@ -15,13 +15,13 @@ class Game
 
         this.input = new Input();
 
-
         gameNs.game.collisionManager = new CollisionManager();
         gameNs.game.player = new Player();
         gameNs.game.player.init();
+
         this.input.addKeyHandler(gameNs.game.player.playerKeys);
         gameNs.game.collisionManager.addCircleCollider(gameNs.game.player.circle);
-
+        gameNs.game.collisionManager.addBoxCollider(new BoxCollider(new Vector2(0, 400), 200, 100));
     }
 
 
@@ -31,6 +31,7 @@ class Game
 
         //  Draw new frame.
         gameNs.game.render();
+        gameNs.game.player.update();
         // Recursive call to Update method.
         window.requestAnimationFrame(gameNs.game.update);
     }
