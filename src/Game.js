@@ -12,12 +12,10 @@ class Game
         gameNs.game.canvas.height = window.innerHeight;
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
-<<<<<<< HEAD
         
         this.input = new Input();
         
         gameNs.game.tileMap = new TileMap(1, "../assets/levels/grassSheet.png");
-=======
 
         var div =  document.createElement('div');
         div.style.position = "relative";
@@ -35,17 +33,11 @@ class Game
 
         this.input.addKeyHandler(gameNs.game.playScreen.player.playerKeys);
         this.input.addKeyHandler(gameNs.game.menuKeys);
->>>>>>> 55d15f46fd335b05ace3152aed3d46007efda601
 
         this.menuHandler = new MenuHandler();
 
-<<<<<<< HEAD
         this.tileMap.init();
 
-        this.input.addKeyHandler(gameNs.game.player.playerKeys);
-        gameNs.game.collisionManager.addCircleCollider(gameNs.game.player.circle);
-        gameNs.game.collisionManager.addBoxCollider(gameNs.game.square);
-=======
         var s = new Scene("Menu", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
         var s2 = new Scene("Play", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
         s.colour = "#7cff81";
@@ -61,7 +53,6 @@ class Game
         title.appendChild(myText);
         title.style.cssText = 'font-size : 124px; padding-top: 200px; padding-left: 100px;';
         this.menuHandler.getCurrentSceneObject().containerDiv.appendChild(title);
->>>>>>> 55d15f46fd335b05ace3152aed3d46007efda601
     }
 
     menuKeys(keys) {

@@ -13,7 +13,6 @@ class Play
 
       this.collisionManager.addCircleCollider(this.player.circle);
       this.collisionManager.addBoxCollider(this.square);
-
   }
 
   update() {
