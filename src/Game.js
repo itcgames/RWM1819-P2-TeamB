@@ -17,25 +17,50 @@ class Game
 
         gameNs.game.collisionManager = new CollisionManager();
         gameNs.game.player = new Player();
-        gameNs.game.square = new BoxCollider(new Vector2(0, 400), 200, 100);
+        gameNs.game.squares = [];
+        for(var i = 1; i < 5; i ++)
+        {
+            gameNs.game.squares.push(new BoxCollider(new Vector2(i*200, 400), 200, 100, ['ground']));
+        }
+        
+        gameNs.game.squares.push(new BoxCollider(new Vector2(200, 100), 200, 100, ['ground']));
+        gameNs.game.squares.push(new BoxCollider(new Vector2(0, 300), 200, 100, ['ground']));
+        gameNs.game.squares.push(new BoxCollider(new Vector2(1000, 300), 200, 100, ['ground']));
+        
         gameNs.game.player.init();
 
         this.input.addKeyHandler(gameNs.game.player.playerKeys);
         gameNs.game.collisionManager.addCircleCollider(gameNs.game.player.circle);
-        gameNs.game.collisionManager.addBoxCollider(gameNs.game.square);
+
+        for(var i = 0; i < gameNs.game.squares.length; i ++)
+        {
+            gameNs.game.collisionManager.addBoxCollider(gameNs.game.squares[i]);
+        }
+        
     }
 
     update() {
         //  Update game objects here.
-        if(CollisionManager.CircleRectangleCollision(gameNs.game.square, gameNs.game.player.circle)){
-            gameNs.game.player.stopGravity = true;
-        } else {
-            gameNs.game.player.stopGravity = false;
+        
+        gameNs.game.player.update();
+        gameNs.game.collisionResults = gameNs.game.collisionManager.checkCircleAndBoxColliderArray();
+        console.log(gameNs.game.collisionResults['Array2']);
+        for(var i = 0; i < gameNs.game.collisionResults['Array1'].length; i++){
+            if(gameNs.game.collisionResults['Array1'][i][CollisionManager.IndexOfElement(gameNs.game.collisionManager.circleColliderArray, gameNs.game.player.circle)] == true){
+                gameNs.game.player.handleCollision(gameNs.game.collisionManager.boxColliderArray[i]);
+            }
         }
+        /* 
+        CollisionManager.ArrayContainsElement(gameNs.game.collisionManager.circleColliderArray, gameNs.game.player.circle)
+        if(CollisionManager.CollidedWithTag(0, gameNs.game.collisionResults['Array2'],gameNs.game.collisionManager.boxColliderArray, 'ground')){
+            gameNs.game.player.collision = true;
+        } else {
+            gameNs.game.player.collision = false;
+        } */
+
 
         //  Draw new frame.
         gameNs.game.render();
-        gameNs.game.player.update();
         // Recursive call to Update method.
         window.requestAnimationFrame(gameNs.game.update);
     }
