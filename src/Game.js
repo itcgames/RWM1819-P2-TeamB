@@ -14,6 +14,7 @@ class Game
         document.body.appendChild(gameNs.game.canvas);
 
         this.input = new Input();
+        this.tileMap = new TileMap("../assets/levels/level1.tmx");
 
         gameNs.game.collisionManager = new CollisionManager();
         gameNs.game.player = new Player();
