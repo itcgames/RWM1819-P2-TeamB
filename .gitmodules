@@ -13,3 +13,8 @@
 [submodule "submodules/RWM1819-Projectile-A"]
 	path = submodules/RWM1819-Projectile-A
 	url = https://github.com/itcgames/RWM1819-Projectile-A.git
+[submodule "submodules/RWM1819-Menu-B"]
+	
+	path = submodules/RWM1819-Menu-B
+	
+	url = https://github.com/itcgames/RWM1819-Menu-B.git
