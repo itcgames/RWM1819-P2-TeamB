@@ -12,55 +12,64 @@ class Game
         gameNs.game.canvas.height = window.innerHeight;
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
+        
+        this.input = new Input();
+        
+        gameNs.game.tileMap = new TileMap(1, "../assets/levels/grassSheet.png");
+
+        var div =  document.createElement('div');
+        div.style.position = "relative";
+        //div.style.display = "inline-block";
+
+        div.style.width = gameNs.game.canvas.width + "px";
+        div.style.height = gameNs.game.canvas.height + "px";
+        div.appendChild(gameNs.game.canvas);
+        document.body.appendChild(div);
 
         this.input = new Input();
+        this.playScreen = new Play();
+        this.playScreen.init();
 
-        gameNs.game.collisionManager = new CollisionManager();
-        gameNs.game.player = new Player();
-        gameNs.game.squares = [];
-        for(var i = 1; i < 5; i ++)
-        {
-            gameNs.game.squares.push(new BoxCollider(new Vector2(i*200, 400), 200, 100, ['ground']));
+
+        this.input.addKeyHandler(gameNs.game.playScreen.player.playerKeys);
+        this.input.addKeyHandler(gameNs.game.menuKeys);
+
+        this.menuHandler = new MenuHandler();
+
+        this.tileMap.init();
+
+        var s = new Scene("Menu", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
+        var s2 = new Scene("Play", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
+        s.colour = "#7cff81";
+        s2.colour = "#7cff81";
+        s2.alpha = "00";
+
+        this.menuHandler.addScene("Menu", s);
+        this.menuHandler.addScene("Play", s2);
+        this.menuHandler.showOnlyCurrentScene();
+
+        var title = document.createElement("h1");
+        var myText = document.createTextNode("Press Enter to start the game");
+        title.appendChild(myText);
+        title.style.cssText = 'font-size : 124px; padding-top: 200px; padding-left: 100px;';
+        this.menuHandler.getCurrentSceneObject().containerDiv.appendChild(title);
+    }
+
+    menuKeys(keys) {
+      keys.forEach(function(element) {
+        if(element == "Enter") {
+          gameNs.game.menuHandler.goToScene("Play");
         }
-        
-        gameNs.game.squares.push(new BoxCollider(new Vector2(200, 100), 200, 100, ['ground']));
-        gameNs.game.squares.push(new BoxCollider(new Vector2(0, 300), 200, 100, ['ground']));
-        gameNs.game.squares.push(new BoxCollider(new Vector2(1000, 300), 200, 100, ['ground']));
-        
-        gameNs.game.player.init();
-
-        this.input.addKeyHandler(gameNs.game.player.playerKeys);
-        gameNs.game.collisionManager.addCircleCollider(gameNs.game.player.circle);
-
-        for(var i = 0; i < gameNs.game.squares.length; i ++)
-        {
-            gameNs.game.collisionManager.addBoxCollider(gameNs.game.squares[i]);
-        }
-        
+      });
     }
 
     update() {
-        //  Update game objects here.
-        
-        gameNs.game.player.update();
-        gameNs.game.collisionResults = gameNs.game.collisionManager.checkCircleAndBoxColliderArray();
-        console.log(gameNs.game.collisionResults['Array2']);
-        for(var i = 0; i < gameNs.game.collisionResults['Array1'].length; i++){
-            if(gameNs.game.collisionResults['Array1'][i][CollisionManager.IndexOfElement(gameNs.game.collisionManager.circleColliderArray, gameNs.game.player.circle)] == true){
-                gameNs.game.player.handleCollision(gameNs.game.collisionManager.boxColliderArray[i]);
-            }
-        }
-        /* 
-        CollisionManager.ArrayContainsElement(gameNs.game.collisionManager.circleColliderArray, gameNs.game.player.circle)
-        if(CollisionManager.CollidedWithTag(0, gameNs.game.collisionResults['Array2'],gameNs.game.collisionManager.boxColliderArray, 'ground')){
-            gameNs.game.player.collision = true;
-        } else {
-            gameNs.game.player.collision = false;
-        } */
-
 
         //  Draw new frame.
         gameNs.game.render();
+        if(gameNs.game.menuHandler._currentScene == "Play") {
+          gameNs.game.playScreen.update();
+        }
         // Recursive call to Update method.
         window.requestAnimationFrame(gameNs.game.update);
     }
@@ -70,7 +79,14 @@ class Game
         this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
 
         //  Render game objects here.
-        this.collisionManager.render(this.ctx);
+
+        if(this.menuHandler._currentScene == "Play") {
+          gameNs.game.playScreen.render(gameNs.game.ctx);
+        }
+        else {
+          this.menuHandler.render(gameNs.game.ctx);
+
+        }
 
     }
 }
