@@ -12,14 +12,17 @@ class Game
         gameNs.game.canvas.height = window.innerHeight;
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
-
+        
         this.input = new Input();
-        this.tileMap = new TileMap("../assets/levels/level1.tmx");
+        
+        gameNs.game.tileMap = new TileMap(1, "../assets/levels/grassSheet.png");
 
         gameNs.game.collisionManager = new CollisionManager();
         gameNs.game.player = new Player();
         gameNs.game.square = new BoxCollider(new Vector2(0, 400), 200, 100);
         gameNs.game.player.init();
+
+        this.tileMap.init();
 
         this.input.addKeyHandler(gameNs.game.player.playerKeys);
         gameNs.game.collisionManager.addCircleCollider(gameNs.game.player.circle);

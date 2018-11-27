@@ -1,23 +1,26 @@
 class TileMap
 {
     /**
+     * 
      * Default constructor
-     * @param {*} path path to tmx file
+     * @param {*} level The level number you want a tilemap for(starting at 1)
+     * @param {*} tileSheetPath Path to the tilesheet for the level
      */
-    constructor(path)
+    constructor(level, tileSheetPath)
     {
-        this.path = path;
-        this.parser = new DOMParser();
-        // this.xmlDocument = this.parser.parseFromString(levelDataAsString, "text/xml");
-
-        this.width; //width in number of tiles
-        this.height; //height in number of tiles
+        this.path = tileSheetPath;
+        this.levelNumber = level - 1; //to get the index array
+        this.width = level1[this.levelNumber].width; //width in number of tiles
+        this.height = level1[this.levelNumber].height; //height in number of tiles
     }
 
     init()
     {
-        this.loadTMX();
+  
+        
     }
+
+     
 
     onTMXLoad()
     {
@@ -26,7 +29,7 @@ class TileMap
   
     loadTMX()
     {
-        
+
     }
 
     update()
