@@ -11,6 +11,7 @@ class Player
       this.circle = new CircleCollider(new Vector2(100,100), 50);
       
       this.gravity = new Vector2(0, .98);
+      this.friction = new Vector2(.7, .5); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0);
       this.acceleration = new Vector2(0,0);
   }
@@ -27,10 +28,13 @@ class Player
   }
 
   update() {
-    this.acceleration.y += this.gravity.y
+    //this.acceleration.y += this.gravity.y
 
     this.velocity.x += this.acceleration.x;
     this.velocity.y += this.acceleration.y;
+
+    this.velocity.x *= this.friction.x;
+    this.velocity.y *= this.friction.y;
 
     gameNs.game.player.circle.shape.position.x += this.velocity.x;
     gameNs.game.player.circle.shape.position.y += this.velocity.y;
