@@ -17,17 +17,21 @@ class Game
 
         gameNs.game.collisionManager = new CollisionManager();
         gameNs.game.player = new Player();
+        gameNs.game.square = new BoxCollider(new Vector2(0, 400), 200, 100);
         gameNs.game.player.init();
 
         this.input.addKeyHandler(gameNs.game.player.playerKeys);
         gameNs.game.collisionManager.addCircleCollider(gameNs.game.player.circle);
-        gameNs.game.collisionManager.addBoxCollider(new BoxCollider(new Vector2(0, 400), 200, 100));
+        gameNs.game.collisionManager.addBoxCollider(gameNs.game.square);
     }
-
-
 
     update() {
         //  Update game objects here.
+        if(CollisionManager.CircleRectangleCollision(gameNs.game.square, gameNs.game.player.circle)){
+            gameNs.game.player.stopGravity = true;
+        } else {
+            gameNs.game.player.stopGravity = false;
+        }
 
         //  Draw new frame.
         gameNs.game.render();

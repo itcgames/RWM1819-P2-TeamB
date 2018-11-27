@@ -8,10 +8,11 @@ class Player
   init() {
       //  Initialise game objects here
       that = this;
+      this.stopGravity = false;
       this.circle = new CircleCollider(new Vector2(100,100), 50);
       
-      this.gravity = new Vector2(0, .98);
-      this.friction = new Vector2(.7, .5); // x represents ground friction and y air friction
+      this.gravity = new Vector2(0, .098);
+      this.friction = new Vector2(.97, 1); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0);
       this.acceleration = new Vector2(0,0);
   }
@@ -28,7 +29,12 @@ class Player
   }
 
   update() {
-    //this.acceleration.y += this.gravity.y
+    if(!this.stopGravity){
+      this.acceleration.y += this.gravity.y;
+    }
+    else{
+      this.velocity.y = 0;
+    }
 
     this.velocity.x += this.acceleration.x;
     this.velocity.y += this.acceleration.y;
