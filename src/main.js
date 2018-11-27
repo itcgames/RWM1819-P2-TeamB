@@ -10,6 +10,8 @@ function main()
     
     gameNs.game = game;
 
+    var tileMap = new TileMap("../assets/levels/level1.tmx");
+
 	assetManager.downloadAll(function() 
 	{
         console.log("Assets downloaded successfully");

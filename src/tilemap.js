@@ -7,27 +7,27 @@ class TileMap
     constructor(path)
     {
         this.path = path;
-        this.xmlLoader = new URLLoader();
-        this.xmlLoader.addEventListener(Event.COMPLETE, xmlLoadComplete);
-        this.xmlLoader.load(new URLRequest(this.path));
+        this.parser = new DOMParser();
+        // this.xmlDocument = this.parser.parseFromString(levelDataAsString, "text/xml");
+
+        this.width; //width in number of tiles
+        this.height; //height in number of tiles
     }
 
-
-    xmlLoadComplete(e)
+    init()
     {
-        this.xml = new XMLDocument(e.target.data);
-        this.mapWidth = xml.attribute("width");
-        console.log(this.mapWidth); 
+        this.loadTMX();
     }
-    /**
-     * Load method to get a .tmx file.
-     * @param {*} path Path to the .tmx file
-     */
-    load()
+
+    onTMXLoad()
     {
 
     }
-
+  
+    loadTMX()
+    {
+        
+    }
 
     update()
     {
