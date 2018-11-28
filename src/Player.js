@@ -25,6 +25,9 @@ class Player
       if(element == "d") {
         that.velocity.x += 6;
       }
+      if(element == "Escape") {
+        gameNs.game.menuHandler.goToScene("Pause");
+      }
     });
   }
 
