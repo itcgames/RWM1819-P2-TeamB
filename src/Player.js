@@ -98,8 +98,9 @@ class Player
     this.circle.shape.position.x += this.velocity.x;
     this.circle.shape.position.y += this.velocity.y;
 
-    this.velocity = this.p.getVelocity();
-    
+    //this.velocity = this.p.getVelocity();
+    //this.circle.shape.position = this.p.getPosition();
+
     this.previousV = this.velocity;
     this.acceleration = new Vector2(0,0);
 
