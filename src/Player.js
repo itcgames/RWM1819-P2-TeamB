@@ -12,7 +12,7 @@ class Player
       this.circle = new CircleCollider(new Vector2(500,100), 50);
 
       this.gravity = new Vector2(0, .098);
-      this.resitution = new Vector2(.90, .50);
+      this.resitution = new Vector2(1.2, .50);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0);
       this.acceleration = new Vector2(0,0);

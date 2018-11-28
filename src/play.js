@@ -12,22 +12,19 @@ class Play
       this.level1.init();
 
       this.player = new Player();
-      this.squares = [];
-      for(var i = 1; i < 5; i ++)
+      for(var i = 0; i < this.level1.height; i++)
       {
-         this.squares.push(new BoxCollider(new Vector2(i*200, 400), 200, 100, ['ground']));
-      }
-        
-      this.squares.push(new BoxCollider(new Vector2(200, 100), 200, 100, ['ground']));
-      this.squares.push(new BoxCollider(new Vector2(0, 300), 200, 100, ['ground']));
-      this.squares.push(new BoxCollider(new Vector2(1000, 300), 200, 100, ['ground']));
-      this.player.init();
-
-      this.collisionManager.addCircleCollider(this.player.circle);
-      for(var i = 0; i < this.squares.length; i ++)
+        this.level1.tileArray[i].forEach(function(element)
         {
-            this.collisionManager.addBoxCollider(this.squares[i]);
-        }
+            if(element.collider) {
+              gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+            }
+        });
+      }
+
+      this.player.init();
+      this.collisionManager.addCircleCollider(this.player.circle);
+
   }
 
   update() {
@@ -45,7 +42,7 @@ class Play
 
 
   render(ctx) {
-      this.collisionManager.render(ctx);
-      this.level1.render();
+    this.collisionManager.render(ctx);
+    this.level1.render();
   }
 }
