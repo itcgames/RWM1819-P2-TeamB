@@ -43,11 +43,13 @@ class Player
       }
       if(element == "f") {
         that.fire();
+      }
       if(element == "Escape") {
         gameNs.game.menuHandler.goToScene("Pause");
       }
-    });
+    })
   }
+
 
   /*
   * Method to handle the collision physics of the object
@@ -64,6 +66,7 @@ class Player
               this.circle.shape.position.x = entity.shape.position.x - this.circle.shape.radius;
               this.velocity.x *= -this.resitution.x;
               console.log("right");
+              this.p.setFired(false);
             }
         }
 
@@ -74,6 +77,7 @@ class Player
             this.circle.shape.position.x = entity.shape.position.x + entity.shape.width + this.circle.shape.radius;
             this.velocity.x *= -this.resitution.x;
             console.log("left");
+            this.p.setFired(false);
           }
       }
 
@@ -81,11 +85,13 @@ class Player
       if(this.circle.shape.position.y > entity.shape.position.y + entity.shape.height){
         this.circle.shape.position.y = entity.shape.position.y + entity.shape.height + this.circle.shape.radius;
           this.velocity.y *= -this.resitution.y;
+          this.p.setFired(false);
       }
       // colliding with the top side of the entity
       if(this.circle.shape.position.y  < entity.shape.position.y){
         this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
         this.velocity.y *= -this.resitution.y;
+        this.p.setFired(false);
       }
     }
   }
@@ -112,6 +118,15 @@ class Player
     this.circle.shape.position.x += this.velocity.x;
     this.circle.shape.position.y += this.velocity.y;
 
+    if (this.p.IsFired())
+    {
+      this.velocity = this.p.getVelocity();
+    }
+    else
+    {
+      this.p.setPosition(this.circle.position.x, this.circle.position.y);
+    }
+
     //this.velocity = this.p.getVelocity();
     //this.circle.shape.position = this.p.getPosition();
 
@@ -123,7 +138,7 @@ class Player
 
   render() 
   {
-    this.pm.render();
+    //this.pm.render();
   }
 
   fire()

@@ -30,9 +30,9 @@ class Game
 
         this.tileMap.init();
 
-        var s = new Scene("Menu", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
-        var s1 = new Scene("Play", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
-        var s2 = new Scene("Pause", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
+        var s = new Scene("Menu", div, {'x': 0, 'y': 0, 'width': 100, 'height': 100});
+        var s1 = new Scene("Play", div, {'x': 0, 'y': 0, 'width': 100, 'height': 100});
+        var s2 = new Scene("Pause", div, {'x': 0, 'y': 0, 'width': 100, 'height': 100});
         s.colour = "#7cff81";
         s1.colour = "#7cff81";
         s1.alpha = "00";
