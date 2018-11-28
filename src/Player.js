@@ -152,7 +152,7 @@ class Player
     }    
   }
 
-  render() 
+  render()
   {
     //this.pm.render();
   }

@@ -11,6 +11,16 @@ class Play
     this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
     this.level1.init();
 
+    for(var i = 0; i < this.level1.height; i++)
+      {
+        this.level1.tileArray[i].forEach(function(element)
+        {
+            if(element.collider) {
+              gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+            }
+        });
+      }
+
     this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);

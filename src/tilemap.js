@@ -1,7 +1,7 @@
 class TileMap
 {
     /**
-     * 
+     *
      * Default constructor
      * @param {*} level The level number you want a tilemap for(starting at 1)
      * @param {*} tileSheetPath Path to the tilesheet for the level
@@ -35,7 +35,7 @@ class TileMap
         {
             this.dataArray[i] = new Array(this.width);
         }
-        
+
         //Get the values from levelData and load them into an array we can reference
         for(var i = 0; i < (this.width * this.height); i += this.width)
         {
@@ -43,7 +43,7 @@ class TileMap
             {
                 this.dataArray[i / this.width][j] = level1[this.levelNumber].layers[0].data[i + j];
             }
-        } 
+        }
 
         console.log(this.dataArray);
 
@@ -64,7 +64,7 @@ class TileMap
                     this.frameTop = 280;
                 }
 
-                else if(this.dataArray[i][j] === 25) //25 is the left lip 
+                else if(this.dataArray[i][j] === 25) //25 is the left lip
                 {
                     this.frameLeft = 210;
                     this.frameTop = 210;
@@ -82,11 +82,10 @@ class TileMap
                 }
 
                 //so on for every tile type number
-                console.log('Tiletype:' + this.dataArray[i][j] + ' x:' + i * this.tileWidth + ' y:' + j * this.tileHeight);
 
                 //lastly push the new tile to the 2d array
 
-                this.tileArray[i].push(new Tile(j * this.tileWidth, 
+                this.tileArray[i].push(new Tile(j * this.tileWidth,
                     i * this.tileHeight,
                     this.frameLeft,
                     this.frameTop,
@@ -94,13 +93,13 @@ class TileMap
                     this.tileHeight,
                     gameNs.game.ctx));
 
-                
+
 
             }
         }
-    
 
-        
+
+
     }
 
     update()
@@ -118,8 +117,8 @@ class TileMap
                 element.render();
             });
         }
-        
- 
+
+
     }
 
 }
