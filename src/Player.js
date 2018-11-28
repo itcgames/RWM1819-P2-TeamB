@@ -5,10 +5,12 @@ class Player
   constructor() {
 
   }
+  
   init() {
       //  Initialise game objects here
       that = this;
       this.collision = false;
+      this.alive = true;
 
       this.circle = new CircleCollider(new Vector2(500,100), 50);
 
@@ -63,84 +65,91 @@ class Player
   handleCollision(entity)
   {
     if(entity != undefined){
-      // colliding with the right side of the entity
-      if(this.circle.shape.position.x < entity.shape.position.x){
-          if(this.circle.shape.position.y - this.circle.shape.radius < entity.shape.position.y + entity.shape.height
-            && this.circle.shape.position.y + this.circle.shape.radius > entity.shape.position.y + this.circle.shape.radius / 4){
-              this.circle.shape.position.x = entity.shape.position.x - this.circle.shape.radius;
+      if (entity.containsObjectTag('ground')) {
+        // colliding with the right side of the entity
+        if(this.circle.position.x < entity.position.x){
+          if(this.circle.position.y - this.circle.radius < entity.position.y + entity.height
+            && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4){
+              this.circle.position.x = entity.position.x - this.circle.radius;
               this.velocity.x *= -this.resitution.x;
               console.log("right");
               this.p.setFired(false);
             }
         }
 
-      // colliding with the right side of the entity
-      if(this.circle.shape.position.x > entity.shape.position.x + entity.shape.width){
-        if(this.circle.shape.position.y - this.circle.shape.radius < entity.shape.position.y + entity.shape.height
-          && this.circle.shape.position.y + this.circle.shape.radius > entity.shape.position.y + this.circle.shape.radius / 4){
-            this.circle.shape.position.x = entity.shape.position.x + entity.shape.width + this.circle.shape.radius;
-            this.velocity.x *= -this.resitution.x;
-            console.log("left");
-            this.p.setFired(false);
-          }
-      }
+        // colliding with the right side of the entity
+        if(this.circle.position.x > entity.position.x + entity.width){
+          if(this.circle.position.y - this.circle.radius < entity.position.y + entity.height
+            && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4){
+              this.circle.position.x = entity.position.x + entity.width + this.circle.radius;
+              this.velocity.x *= -this.resitution.x;
+              console.log("left");
+              this.p.setFired(false);
+            }
+        }
 
-      // colliding with the bottom side of the entity
-      if(this.circle.shape.position.y > entity.shape.position.y + entity.shape.height){
-        this.circle.shape.position.y = entity.shape.position.y + entity.shape.height + this.circle.shape.radius;
+        // colliding with the bottom side of the entity
+        if(this.circle.position.y > entity.position.y + entity.height){
+          this.circle.position.y = entity.position.y + entity.height + this.circle.radius;
+            this.velocity.y *= -this.resitution.y;
+            this.p.setFired(false);
+        }
+        // colliding with the top side of the entity
+        if(this.circle.position.y  < entity.position.y){
+          this.circle.position.y = entity.position.y - this.circle.radius;
           this.velocity.y *= -this.resitution.y;
           this.p.setFired(false);
-      }
-      // colliding with the top side of the entity
-      if(this.circle.shape.position.y  < entity.shape.position.y){
-        this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
-        this.velocity.y *= -this.resitution.y;
-        this.p.setFired(false);
-      }
+        }
+      } else if (entity.containsObjectTag('obstacle')) {
+        this.circle.position.x = 500;
+        this.circle.position.y = 100;
+      }    
     }
   }
 
   update() {
-    this.render();
-    this.acceleration.y += this.gravity.y;
+    if (this.alive) {
+      this.render();
+      this.acceleration.y += this.gravity.y;
 
-    if(this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
-      this.velocity.x += this.acceleration.x;
-    }
+      if(this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
+        this.velocity.x += this.acceleration.x;
+      }
 
-    this.velocity.y += this.acceleration.y;
+      this.velocity.y += this.acceleration.y;
 
-    this.velocity.x *= this.friction.x;
-    this.velocity.y *= this.friction.y;
+      this.velocity.x *= this.friction.x;
+      this.velocity.y *= this.friction.y;
 
-    // threshold for the velocity, come to rest after a while
-    if(this.velocity.y < .05 && this.velocity.y > -.05){
-      this.velocity.y = 0;
-    }
-    if(this.velocity.x < .005 && this.velocity.x > -.005){
-      this.velocity.x = 0;
-    }
+      // threshold for the velocity, come to rest after a while
+      if(this.velocity.y < .05 && this.velocity.y > -.05){
+        this.velocity.y = 0;
+      }
+      if(this.velocity.x < .005 && this.velocity.x > -.005){
+        this.velocity.x = 0;
+      }
 
-    // update the object position with the current velocity
-    this.circle.shape.position.x += this.velocity.x;
-    this.circle.shape.position.y += this.velocity.y;
+      // update the object position with the current velocity
+      this.circle.position.x += this.velocity.x;
+      this.circle.position.y += this.velocity.y;
 
-    if (this.p.IsFired())
-    {
-      this.velocity = this.p.getVelocity();
-    }
-    else
-    {
-      this.p.setPosition(this.circle.position.x, this.circle.position.y);
-    }
+      if (this.p.IsFired())
+      {
+        this.velocity = this.p.getVelocity();
+      }
+      else
+      {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
+      }
 
-    //this.velocity = this.p.getVelocity();
-    //this.circle.shape.position = this.p.getPosition();
+      //this.velocity = this.p.getVelocity();
+      //this.circle.position = this.p.getPosition();
 
-    this.previousV = this.velocity;
-    this.acceleration = new Vector2(0,0);
+      this.previousV = this.velocity;
+      this.acceleration = new Vector2(0,0);
 
-    this.pm.update();
+      this.pm.update();
+    }    
   }
 
   render() 
