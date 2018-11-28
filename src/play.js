@@ -12,9 +12,15 @@ class Play
       this.level1.init();
 
       this.player = new Player();
+<<<<<<< HEAD
       this.interactableTest = new Interactable(400, 50, 50, 50, "test",'magenta', {});
 
       for(var i = 0; i < this.level1.height; i++)
+=======
+      this.interactableTest = new Interactable(400, 50, 50, 50, "test",'magenta', {minX: 400, minY: 50, maxX: 500, maxY: 50});
+      this.squares = [];
+      for(var i = 1; i < 5; i ++)
+>>>>>>> implementing new drag and drop implementation
       {
         this.level1.tileArray[i].forEach(function(element)
         {

@@ -5,10 +5,14 @@ class Interactable{
     *   Constructor for the interactable object
     */
     constructor(x, y, width, height, tag, colour,range){
+        
         this.sprite; // TODO: add sprite entity
         this.collider = new BoxCollider(new Vector2(x,y), width, height, tag, "");
         this.draggable = new Draggable(this);
+        this.draggable.setAxisLock("horizontal", range);
+
         console.log(this.collider);
+
         this.playerCollision = false;
         this.audioManager; // TODO: add sound manager
         this.colour = colour;
@@ -22,9 +26,14 @@ class Interactable{
     */
     getCollider(){
         if(this.collider != undefined){
-            return {x: this.collider.shape.position.x, y: this.collider.shape.position.y, 
-                width: this.collider.shape.width, height: this.collider.shape.height};
+            return this.collider;
         }
+    }
+
+    getBoundingBox(){
+        if(this.collider != undefined){
+            return {x: this.collider.shape.position.x, y: this.collider.shape.position.y, 
+            width: this.collider.shape.width, height: this.collider.shape.height};}
     }
 
     /*
