@@ -7,6 +7,10 @@ class Play
   init() {
 
       this.collisionManager = new CollisionManager();
+
+      this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
+      this.level1.init();
+
       this.player = new Player();
       this.squares = [];
       for(var i = 1; i < 5; i ++)
@@ -29,7 +33,7 @@ class Play
   update() {
       //  Update game objects here.
      this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
-        console.log(this.collisionResults['Array2']);
+        //console.log(this.collisionResults['Array2']);
         for(var i = 0; i < this.collisionResults['Array1'].length; i++){
             if(this.collisionResults['Array1'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
                 this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
@@ -42,5 +46,6 @@ class Play
 
   render(ctx) {
       this.collisionManager.render(ctx);
+      this.level1.render();
   }
 }

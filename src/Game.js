@@ -14,8 +14,6 @@ class Game
         document.body.appendChild(gameNs.game.canvas);
         
         this.input = new Input();
-        
-        gameNs.game.tileMap = new TileMap(1, "../assets/levels/grassSheet.png");
 
         var div =  document.createElement('div');
         div.style.position = "relative";
@@ -35,8 +33,6 @@ class Game
         this.input.addKeyHandler(gameNs.game.menuKeys);
 
         this.menuHandler = new MenuHandler();
-
-        this.tileMap.init();
 
         var s = new Scene("Menu", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
         var s2 = new Scene("Play", div, {'x': 0, 'y': 0, 'width': window.innerWidth, 'height': window.innerHeight});
