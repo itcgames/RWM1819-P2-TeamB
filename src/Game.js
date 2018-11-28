@@ -8,8 +8,8 @@ class Game
         //  Initialise the canvas
         gameNs.game.canvas = document.createElement("canvas");
         gameNs.game.canvas.id = 'mycanvas';
-        gameNs.game.canvas.width = window.innerWidth;
-        gameNs.game.canvas.height = window.innerHeight;
+        gameNs.game.canvas.width = 5000;
+        gameNs.game.canvas.height = 5000;
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
         

@@ -21,35 +21,35 @@ class TileMap
     init()
     {
         //Create 2d array for tile objects
-        this.tileArray = new Array(this.width);
+        this.tileArray = new Array(this.height);
 
         for(var i = 0; i < this.tileArray.length; i++)
         {
-            this.tileArray[i] = new Array(this.height);
+            this.tileArray[i] = [];
         }
 
         //Create 2d array of numbers from the level data
-        this.dataArray = new Array(this.width);
+        this.dataArray = new Array(this.height);
 
         for(var i = 0; i < this.dataArray.length; i++)
         {
-            this.dataArray[i] = new Array(this.height);
+            this.dataArray[i] = new Array(this.width);
         }
         
         //Get the values from levelData and load them into an array we can reference
-        for(var i = 0; i < (this.width * this.height); i += this.height)
+        for(var i = 0; i < (this.width * this.height); i += this.width)
         {
-            for(var j = 0; j < this.height; j++)
+            for(var j = 0; j < this.width; j++)
             {
-                this.dataArray[i / this.height][j] = level1[this.levelNumber].layers[0].data[i + j];
+                this.dataArray[i / this.width][j] = level1[this.levelNumber].layers[0].data[i + j];
             }
         } 
 
         console.log(this.dataArray);
 
-        for(var i = 0; i < this.width; i++)
+        for(var i = 0; i < this.height; i++)
         {
-            for(var j = 0; j < this.height; j++)
+            for(var j = 0; j < this.width; j++)
             {
                 //Change the sprite's frame sizes based on what tile we want to create
                 if(this.dataArray[i][j] === 26) //26 in data is the regular grass tile.
@@ -76,12 +76,18 @@ class TileMap
                     this.frameTop = 140;
                 }
 
+                else {
+                    this.frameLeft = 400;
+                    this.frameTop = 200;
+                }
+
                 //so on for every tile type number
+                console.log('Tiletype:' + this.dataArray[i][j] + ' x:' + i * this.tileWidth + ' y:' + j * this.tileHeight);
 
                 //lastly push the new tile to the 2d array
 
-                this.tileArray[i].push(new Tile(i * this.tileWidth, 
-                    j * this.tileHeight,
+                this.tileArray[i].push(new Tile(j * this.tileWidth, 
+                    i * this.tileHeight,
                     this.frameLeft,
                     this.frameTop,
                     this.tileWidth,
@@ -105,7 +111,7 @@ class TileMap
 
     render()
     {
-        for(var i = 0; i < this.width; i++)
+        for(var i = 0; i < this.height; i++)
         {
             this.tileArray[i].forEach(function(element)
             {
