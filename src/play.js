@@ -8,7 +8,7 @@ class Play
 
       this.collisionManager = new CollisionManager();
       this.player = new Player();
-      this.interactableTest = new Interactable(400, 50, 50, 50, "test",'magenta', {});
+      this.interactableTest = new Interactable(400, 50, 50, 50, "test",'magenta', {minX: 400, minY: 50, maxX: 500, maxY: 50});
       this.squares = [];
       for(var i = 1; i < 5; i ++)
       {
