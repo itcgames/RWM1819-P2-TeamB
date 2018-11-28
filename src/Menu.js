@@ -13,7 +13,7 @@ class MainMenu
     this.instruction = document.createElement("h1");
     myText = document.createTextNode("Press Enter to start the game");
     this.instruction.appendChild(myText);
-    this.instruction.style.cssText = 'font-size : 64px; position: absolute; top: 5%; left: 1.4%;';
+    this.instruction.style.cssText = 'font-size : 64px; position: absolute; top: 50%; left: 27%;';
   }
 
   menuKeys(keys) {

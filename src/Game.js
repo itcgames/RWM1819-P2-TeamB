@@ -12,15 +12,15 @@ class Game
         gameNs.game.canvas.height = window.innerHeight;
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
-        
+
         this.input = new Input();
-        
+
         gameNs.game.tileMap = new TileMap(1, "../assets/levels/grassSheet.png");
 
         var div =  document.createElement('div');
         div.style.position = "relative";
         //div.style.display = "inline-block";
-        
+
         div.appendChild(gameNs.game.canvas);
         document.body.appendChild(div);
 

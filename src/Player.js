@@ -9,11 +9,11 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
-      
+
       this.circle = new CircleCollider(new Vector2(500,100), 50);
 
       this.gravity = new Vector2(0, .098);
-      this.resitution = new Vector2(.50, .50); // how much bounce as applied to the ball
+      this.resitution = new Vector2(1.2, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0); //
       this.acceleration = new Vector2(0,0);
@@ -28,15 +28,19 @@ class Player
       this.pm.setGlobalGravity(2.1);
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
+
+      this.previousV = new Vector2(0,0);
+
+      this.MAX_SPEED_X = 6;
   }
 
   playerKeys(keys) {
     keys.forEach(function(element) {
       if(element == "a") {
-        that.acceleration.x -= 6;
+        that.acceleration.x -= 1;
       }
       if(element == "d") {
-        that.acceleration.x += 6;
+        that.acceleration.x += 1;
       }
       if(element == "w") {
         that.acceleration.y -= 6;
@@ -100,7 +104,10 @@ class Player
     this.render();
     this.acceleration.y += this.gravity.y;
 
-    this.velocity.x += this.acceleration.x;
+    if(this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
+      this.velocity.x += this.acceleration.x;
+    }
+
     this.velocity.y += this.acceleration.y;
 
     this.velocity.x *= this.friction.x;
