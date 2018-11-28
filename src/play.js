@@ -29,9 +29,9 @@ class Play
   update() {
       //  Update game objects here.
      this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
-        console.log(this.collisionResults['Array2']);
-        for(var i = 0; i < this.collisionResults['Array1'].length; i++){
-            if(this.collisionResults['Array1'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
+        console.log(this.collisionResults['CircleResults']);
+        for(var i = 0; i < this.collisionResults['BoxResults'].length; i++){
+            if(this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
                 this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
             }
         }

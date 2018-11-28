@@ -48,6 +48,18 @@ class Game
         this.menuHandler.addScene("Play", s2);
         this.menuHandler.showOnlyCurrentScene();
 
+        //Stores cursor (x,y) coordinates
+        this.mX = 0;
+        this.mY = 0;
+        this.prevTime = 0;
+        this.dt = 0;
+
+        //Listens for mouse movement event and updates position var
+        window.addEventListener("mousemove", function(e){
+          gameNs.game.mX = e.clientX;
+          gameNs.game.mY = e.clientY;
+        })
+
         var title = document.createElement("h1");
         var myText = document.createTextNode("Press Enter to start the game");
         title.appendChild(myText);
@@ -64,12 +76,16 @@ class Game
     }
 
     update() {
+        var now = Date.now();
+        gameNs.game.dt = (now - gameNs.game.prevTime);
+        gameNs.game.prevTime = now;
 
         //  Draw new frame.
         gameNs.game.render();
         if(gameNs.game.menuHandler._currentScene == "Play") {
           gameNs.game.playScreen.update();
         }
+        gameNs.game.dt = 0;
         // Recursive call to Update method.
         window.requestAnimationFrame(gameNs.game.update);
     }
