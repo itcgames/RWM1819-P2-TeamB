@@ -8,6 +8,7 @@ class Play
 
       this.collisionManager = new CollisionManager();
       this.player = new Player();
+      this.interactableTest = new Interactable(400, 50, 50, 50, "test",'magenta', {});
       this.squares = [];
       for(var i = 1; i < 5; i ++)
       {
@@ -29,7 +30,6 @@ class Play
   update() {
       //  Update game objects here.
      this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
-        console.log(this.collisionResults['Array2']);
         for(var i = 0; i < this.collisionResults['Array1'].length; i++){
             if(this.collisionResults['Array1'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
                 this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
@@ -41,6 +41,7 @@ class Play
 
 
   render(ctx) {
+      this.interactableTest.draw(ctx);
       this.collisionManager.render(ctx);
   }
 }
