@@ -27,7 +27,7 @@ class Play
       this.offSetY = 0;
 
       this.actualCentre = 0;
-      this.actual0 = 0;
+      this.actual0 = -1000;
   }
 
   update() {
@@ -58,7 +58,7 @@ class Play
 
 
   render(ctx) {
-    ctx.translate(-2, this.offSetY);
+    ctx.translate(-1, this.offSetY);
     this.collisionManager.render(ctx);
     this.level1.render();
     ctx.restore();
