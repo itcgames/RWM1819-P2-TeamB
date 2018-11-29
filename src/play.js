@@ -13,7 +13,7 @@ class Play
 
 	  this.player = new Player();
 
-	  this.interactableTest = new Interactable(400, 300, 200, 50, 'platform','magenta', {minX: 400, minY: 300, maxX: 500, maxY: 600});
+	  this.interactableTest = new Interactable(400, 300, 200, 50, 'platform','vertical', {minX: 400, minY: 300, maxX: 400, maxY: 800});
 
 	  for(var i = 0; i < this.level1.height; i++)
 	  {
@@ -47,6 +47,7 @@ class Play
 
 
   render(ctx) {
+	this.interactableTest.render();
 	this.collisionManager.render(ctx);
 	this.level1.render();
   }

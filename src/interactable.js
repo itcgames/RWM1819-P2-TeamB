@@ -4,23 +4,29 @@ class Interactable{
     /*
     *   Constructor for the interactable object
     */
-    constructor(x, y, width, height, tag, colour,range){
+    constructor(x, y, width, height, tag, axisLock,range){
         
         this.sprite; // TODO: add sprite entity
         this.collider = new BoxCollider(new Vector2(x,y), width, height, [tag], ['saw']);
         this.draggable = new Draggable(this);
-        this.draggable.setAxisLock("horizontal", range);
+        this.draggable.setAxisLock(axisLock, range);
+        this.range = range;
 
-        console.log(this.collider);
-        this.offSet = {x: 0, y:0};
-        this.lastPosition = {x: this.collider.x, y:this.collider.y};
+        this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/levelAssets/PNG Metal/slice03_03.png"),
+                                 width,
+                                 height,
+                                 0,
+                                 0,
+                                 x,
+                                 y,
+                                 gameNs.game.ctx);
+
+        this.sprite.scaleX = width / 70;
+
+        this.lastPosition = {x: 0, y:0};
 
         this.playerCollision = false;
         this.audioManager; // TODO: add sound manager
-        this.colour = colour;
-
-        this.hoverOn = 'blue';
-        this.hoverOff = colour;
     }
 
     /*
@@ -55,11 +61,16 @@ class Interactable{
     }
 
     updatePosition(x,y){
-        this.lastPosition.x = this.collider.shape.position.x;
-        this.lastPosition.x = this.collider.shape.position.y;
-
-        this.collider.shape.position.x = x;
-        this.collider.shape.position.y = y;
+        this.lastPosition.x = this.collider.position.x - x;
+        this.lastPosition.y = this.collider.position.y - y;
+        
+        if(this.lastPosition.y < 50)
+        { 
+            this.collider.position.y = y;
+            this.sprite.y = y;
+        }
+        this.collider.position.x = x;
+        this.sprite.x = x;
     }
 
     /*
@@ -69,10 +80,11 @@ class Interactable{
     updatePlayerPos(player){
         if(this.draggable.dragging){
             if(this.draggable.axis == "horizontal"){
-                console.log(this.lastPosition.x);
-                player.circle.position.x =  player.circle.position.x + (this.lastPosition.x - this.collider.shape.position.x);
+                player.circle.position.x = player.circle.position.x - this.lastPosition.x;
             } else {
-                player.circle.position.y =  player.circle.position.y + this.offSet.y;
+                if(this.lastPosition.y < 50){
+                    player.circle.position.y =  this.collider.position.y - player.circle.radius;
+                }
             }
         }
     }
@@ -81,7 +93,6 @@ class Interactable{
     *   visual affordance for when the mouse hovers over the interactable - called in drggable component
     */
     hoverStart(){
-        // TODO: add visual affordance for hover over
         this.colour = this.hoverOn;
     }
 
@@ -93,13 +104,12 @@ class Interactable{
         this.colour = this.hoverOff;
     }
 
-    draw(ctx){
-        // TODO: replace with sprite rendering
-        // testing the draw
-        ctx.beginPath();
-        ctx.fillStyle = this.colour;
-        var collider = this.getBoundingBox();
-        ctx.fillRect(collider.x, collider.y, collider.width, collider.height);
-        ctx.closePath();
+    render(){
+        gameNs.game.ctx.beginPath();
+        gameNs.game.ctx.moveTo(this.range.minX + this.collider.width / 2 ,this.range.minY + this.collider.height / 2);
+        gameNs.game.ctx.lineTo(this.range.maxX + this.collider.width / 2,this.range.maxY + this.collider.height / 2);
+        gameNs.game.ctx.stroke();
+        gameNs.game.ctx.closePath();
+        this.sprite.draw();
     }
 }
