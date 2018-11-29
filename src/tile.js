@@ -1,7 +1,6 @@
 class Tile
 {
-    constructor(xPos, yPos, frameLeft, frameTop, width, height, ctx)
-    {
+    constructor(xPos, yPos, frameLeft, frameTop, width, height, tileType) {
         //Sprite initialization
         this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/levels/grassSheet.png"),
                                  width,
@@ -14,16 +13,13 @@ class Tile
 
         this.x = xPos;
         this.y = yPos;
-        if(frameLeft != 400 && frameTop != 200) {
+        if (frameLeft != 400 && frameTop != 200) {
           this.collider = new BoxCollider(new Vector2(xPos, yPos), width, height, ['ground']);
         }
-
+        this.tileType = tileType;
     }
 
-    render()
-    {
+    render() {
         this.sprite.draw();
     }
-
-
 }

@@ -29,8 +29,7 @@ class MainMenu
 
   }
 
-
   render(ctx) {
-
+    
   }
 }

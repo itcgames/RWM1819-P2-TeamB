@@ -5,10 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "firefox",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/src\\tilemap.js"
+            "reAttach": true,
+            "name": "Launch Game",
+            "file": "${workspaceFolder}/Game.html"
         }
     ]
 }

@@ -62,7 +62,7 @@ class Game
         this.dt = 0;
 
         //Listens for mouse movement event and updates position var
-        window.addEventListener("mousemove", function(e){
+        window.addEventListener("mousemove", function(e) {
           gameNs.game.mX = e.clientX;
           gameNs.game.mY = e.clientY;
         })
@@ -75,8 +75,6 @@ class Game
         this.menuHandler.getCurrentSceneObject().containerDiv.appendChild(this.menu.title);
         this.menuHandler.getCurrentSceneObject().containerDiv.appendChild(this.menu.instruction);
     }
-
-
 
     update() {
         var now = Date.now();
@@ -101,12 +99,10 @@ class Game
 
         if(this.menuHandler._currentScene == "Play") {
           gameNs.game.playScreen.render(gameNs.game.ctx);
-        }
-        else if(this.menuHandler._currentScene == "Menu") {
+        } else if(this.menuHandler._currentScene == "Menu") {
           this.menuHandler.render(gameNs.game.ctx);
           gameNs.game.menu.render(gameNs.game.ctx);
-        }
-        else {
+        } else {
           gameNs.game.playScreen.render(gameNs.game.ctx);
           this.menuHandler.render(gameNs.game.ctx);
           gameNs.game.pause.render(gameNs.game.ctx);
