@@ -151,6 +151,23 @@ class Player
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
 
+      if (this.p.velocityX > 100)
+      {
+        this.p.velocityX = 100;
+      }
+      else if (this.p.velocityX < -100)
+      {
+        this.p.velocityX = -100;
+      }
+      if (this.p.velocityY > 100)
+      {
+        this.p.velocityY = 100;
+      }
+      else if (this.p.velocityY < -100)
+      {
+        this.p.velocityY = -100;
+      }
+
       if (this.p.IsFired()) {
         this.velocity = this.p.getVelocity();
       } else {
@@ -163,6 +180,7 @@ class Player
     } else {
       this.resetPlayer();
     }
+
   }
 
   render()
