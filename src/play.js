@@ -6,45 +6,48 @@ class Play
 
   init() {
 
-      this.collisionManager = new CollisionManager();
+	  this.collisionManager = new CollisionManager();
 
-      this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
-      this.level1.init();
+	  this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
+	  this.level1.init();
 
-      this.player = new Player();
+	  this.player = new Player();
 
-      this.interactableTest = new Interactable(400, 50, 50, 50, "test",'magenta', {});
+	  this.interactableTest = new Interactable(400, 300, 200, 50, 'platform','magenta', {minX: 400, minY: 300, maxX: 500, maxY: 600});
 
-      for(var i = 0; i < this.level1.height; i++)
-      {
-        this.level1.tileArray[i].forEach(function(element)
-        {
-            if(element.collider) {
-              gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
-            }
-        });
-      }
+	  for(var i = 0; i < this.level1.height; i++)
+	  {
+		this.level1.tileArray[i].forEach(function(element)
+		{
+			if(element.collider) {
+			  gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+			}
+		});
+	  }
 
-      this.player.init();
-      this.collisionManager.addCircleCollider(this.player.circle);
-
+	  this.player.init();
+	  this.collisionManager.addCircleCollider(this.player.circle);
+	  this.collisionManager.addBoxCollider(this.interactableTest.getCollider());
   }
 
   update() {
-      //  Update game objects here.
-     this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
-      for(var i = 0; i < this.collisionResults['BoxResults'].length; i++){
-            if(this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
-             this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
-            }
-      }
+	  //  Update game objects here.
+	 this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
+	  for(var i = 0; i < this.collisionResults['BoxResults'].length; i++){
+		if(this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
+			this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
+			if(this.collisionManager.boxColliderArray[i].containsObjectTag('platform')){
+				this.interactableTest.updatePlayerPos(this.player);
+			}		 
+		}
+	  }
 
-      this.player.update();
+	  this.player.update();
   }
 
 
   render(ctx) {
-    this.collisionManager.render(ctx);
-    this.level1.render();
+	this.collisionManager.render(ctx);
+	this.level1.render();
   }
 }

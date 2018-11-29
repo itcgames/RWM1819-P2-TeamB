@@ -7,11 +7,13 @@ class Interactable{
     constructor(x, y, width, height, tag, colour,range){
         
         this.sprite; // TODO: add sprite entity
-        this.collider = new BoxCollider(new Vector2(x,y), width, height, "platform", "");
+        this.collider = new BoxCollider(new Vector2(x,y), width, height, [tag], ['saw']);
         this.draggable = new Draggable(this);
         this.draggable.setAxisLock("horizontal", range);
 
         console.log(this.collider);
+        this.offSet = {x: 0, y:0};
+        this.lastPosition = {x: this.collider.x, y:this.collider.y};
 
         this.playerCollision = false;
         this.audioManager; // TODO: add sound manager
@@ -53,6 +55,9 @@ class Interactable{
     }
 
     updatePosition(x,y){
+        this.lastPosition.x = this.collider.shape.position.x;
+        this.lastPosition.x = this.collider.shape.position.y;
+
         this.collider.shape.position.x = x;
         this.collider.shape.position.y = y;
     }
@@ -63,11 +68,11 @@ class Interactable{
     */
     updatePlayerPos(player){
         if(this.draggable.dragging){
-            var pCollider = player.getCollider()
-            if(this.draggable.axisLock == "horizontal"){
-                player.setX(this.collider.x + pCollider.position.x);
+            if(this.draggable.axis == "horizontal"){
+                console.log(this.lastPosition.x);
+                player.circle.position.x =  player.circle.position.x + (this.lastPosition.x - this.collider.shape.position.x);
             } else {
-                player.setY(this.collider.y + pCollider.position.y);
+                player.circle.position.y =  player.circle.position.y + this.offSet.y;
             }
         }
     }
