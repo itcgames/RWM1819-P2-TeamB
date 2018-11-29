@@ -20,6 +20,7 @@ class MainMenu
     keys.forEach(function(element) {
       if(element == "Enter") {
         gameNs.game.menuHandler.goToScene("Play");
+        gameNs.game.ctx.translate(0, -1000);
       }
     });
   }

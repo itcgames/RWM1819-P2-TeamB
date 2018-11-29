@@ -12,7 +12,7 @@ class Player
       this.collision = false;
 
       this.alive = true;
-      this.spawnPoint = new Vector2(500, 100);
+      this.spawnPoint = new Vector2(400, 1700);
 
       this.circle = new CircleCollider(new Vector2(this.spawnPoint.x, this.spawnPoint.y), 50);
 
@@ -33,6 +33,11 @@ class Player
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
 
+      //Create SoundManager Object
+      this.sm = new SoundManager();
+      this.initSound();
+      this.isGrounded = false;
+
       this.previousV = new Vector2(0,0);
 
       this.MAX_SPEED_X = 6;
@@ -48,16 +53,17 @@ class Player
       }
       if(element == "w") {
         that.acceleration.y -= 6;
+        that.sm.playSound("jump", false);
       }
       if(element == "f") {
         that.fire();
+        that.sm.playSound("proj", false);
       }
       if(element == "Escape") {
         gameNs.game.menuHandler.goToScene("Pause");
       }
     })
   }
-
 
   /*
   * Method to handle the collision physics of the object
@@ -97,14 +103,19 @@ class Player
             this.p.setFired(false);
         }
         // colliding with the top side of the entity
-        if(this.circle.position.y  < entity.position.y){
-          this.circle.position.y = entity.position.y - this.circle.radius;
+        if(this.circle.shape.position.y  < entity.shape.position.y){
+          this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
           this.velocity.y *= -this.resitution.y;
           this.p.setFired(false);
+
+          if (!this.isGrounded) {
+            this.sm.playSound("land", false);
+          }
+          this.isGrounded = true;
         }
-      } else if (entity.containsObjectTag('obstacle')) {
+      }else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
-      }    
+      }       
     }
   }
 
@@ -130,9 +141,14 @@ class Player
         this.velocity.x = 0;
       }
 
+      if (!this.circle.colliding)
+      {
+        this.isGrounded = false;
+      }
+
       // update the object position with the current velocity
-      this.circle.position.x += this.velocity.x;
-      this.circle.position.y += this.velocity.y;
+      this.circle.shape.position.x += this.velocity.x;
+      this.circle.shape.position.y += this.velocity.y;
 
       if (this.p.IsFired())
       {
@@ -157,6 +173,7 @@ class Player
 
   render()
   {
+    //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
   }
 
@@ -172,5 +189,15 @@ class Player
     this.velocity.y = 0;
     this.alive = true;
     this.p.setVelocity(0, 0);
+  }
+
+  initSound() {
+    //Initialize the soundmanager
+    this.sm.initialize();
+    //this.sm.setVolume(0.8);
+    //Load Jump Sound
+    this.sm.loadSound("jump", "assets/audio/player_jump.ogg");
+    this.sm.loadSound("land", "assets/audio/player_land.ogg");
+    this.sm.loadSound("proj", "assets/audio/player_proj.ogg");
   }
 }

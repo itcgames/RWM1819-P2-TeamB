@@ -10,10 +10,10 @@ class TileMap
     {
         this.path = tileSheetPath;
         this.levelNumber = level - 1; //to get the index array
-        this.width = level1[this.levelNumber].width; //width in number of tiles
-        this.height = level1[this.levelNumber].height; //height in number of tiles
-        this.tileWidth = level1[this.levelNumber].tilewidth; //width in pixels of individual tiles
-        this.tileHeight = level1[this.levelNumber].tileheight; //height in pixels of individual tile
+        this.width = level2[0].width; //width in number of tiles
+        this.height = level2[0].height; //height in number of tiles
+        this.tileWidth = level2[0].tilewidth; //width in pixels of individual tiles
+        this.tileHeight = level2[0].tileheight; //height in pixels of individual tile
         this.frameLeft = 0;
         this.frameTop = 0;
     }
@@ -41,7 +41,7 @@ class TileMap
         {
             for(var j = 0; j < this.width; j++)
             {
-                this.dataArray[i / this.width][j] = level1[this.levelNumber].layers[0].data[i + j];
+                this.dataArray[i / this.width][j] = level2[0].layers[0].data[i + j];
             }
         }
 

@@ -24,6 +24,10 @@ class Play
     this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
+    this.offSetY = 0;
+
+    this.actualCentre = 0;
+    this.actual0 = -1000;
 
     this.enemies = [];
     for (var i = 0; i < 1; i++) {
@@ -61,6 +65,20 @@ class Play
         this.resetLevel();
     }
 
+    this.actualCentre = this.player.circle.shape.position.y + this.actual0 - 500;
+
+    if(this.actualCentre < -10) {
+    this.offSetY = 3;
+    }
+    else if(this.actualCentre > 10) {
+    this.offSetY = -3;
+    }
+    else {
+    this.offSetY = 0;
+    }
+
+    this.actual0 += this.offSetY;
+
     this.player.update();
     this.enemies.forEach(enemy => {
         enemy.update();
@@ -70,8 +88,10 @@ class Play
 
 
   render(ctx) {
+    ctx.translate(-1, this.offSetY);
     this.collisionManager.render(ctx);
     this.level1.render();
+    ctx.restore();
   }
 
   resetLevel(){
