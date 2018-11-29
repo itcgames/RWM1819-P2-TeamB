@@ -10,9 +10,11 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
-      this.alive = true;
 
-      this.circle = new CircleCollider(new Vector2(500,100), 50);
+      this.alive = true;
+      this.spawnPoint = new Vector2(500, 100);
+
+      this.circle = new CircleCollider(new Vector2(this.spawnPoint.x, this.spawnPoint.y), 50);
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
@@ -101,8 +103,7 @@ class Player
           this.p.setFired(false);
         }
       } else if (entity.containsObjectTag('obstacle')) {
-        this.circle.position.x = 500;
-        this.circle.position.y = 100;
+        this.alive = false;
       }    
     }
   }
@@ -149,7 +150,9 @@ class Player
       this.acceleration = new Vector2(0,0);
 
       this.pm.update();
-    }    
+    } else {
+      this.resetPlayer();
+    }
   }
 
   render()
@@ -160,5 +163,14 @@ class Player
   fire()
   {
     this.pm.fireProjectiles();
+  }
+
+  resetPlayer() {
+    this.circle.position.x = this.spawnPoint.x;
+    this.circle.position.y = this.spawnPoint.y;
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.alive = true;
+    this.p.setVelocity(0, 0);
   }
 }

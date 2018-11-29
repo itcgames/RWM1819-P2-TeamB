@@ -12,39 +12,33 @@ class Play
     this.level1.init();
 
     for(var i = 0; i < this.level1.height; i++)
-      {
+    {
         this.level1.tileArray[i].forEach(function(element)
         {
             if(element.collider) {
-              gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+                gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
             }
         });
-      }
+    }
 
     this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
 
-    this.squares = [];
-    for(var i = 1; i < 5; i ++)
-    {
-        this.squares.push(new BoxCollider(new Vector2(i*200, 400), 200, 100, ['ground']));
-    }
-      
-    this.squares.push(new BoxCollider(new Vector2(200, 100), 200, 100, ['ground']));
-    this.squares.push(new BoxCollider(new Vector2(0, 300), 200, 100, ['ground']));
-    this.squares.push(new BoxCollider(new Vector2(1000, 300), 200, 100, ['ground']));
-
-    for(var i = 0; i < this.squares.length; i ++)
-    {
-      this.collisionManager.addBoxCollider(this.squares[i]);
-    }
-
     this.enemies = [];
     for (var i = 0; i < 1; i++) {
-      this.enemies.push(new Enemy(new Vector2(i * 100, 100), new Vector2(i * 100 + 100, 100)));
-      this.collisionManager.addCircleCollider(this.enemies[i].collider);
+        this.enemies.push(new Enemy(new Vector2(i * 100, 100), new Vector2(i * 100 + 100, 100), 3));
+        this.collisionManager.addCircleCollider(this.enemies[i].collider);
     }
+
+    this.sawBlades = [];
+    for (var i = 0; i < 3; i++){
+        this.sawBlades.push(new Sawblade(new Vector2(i * 200, 100), 50));
+        this.collisionManager.addCircleCollider(this.sawBlades[i].collider);
+    } 
+    
+    this.wallOfDeath = new WallOfDeath(0, 1);
+    this.collisionManager.addBoxCollider(this.wallOfDeath.collider);
   }
 
   update() {
@@ -63,16 +57,24 @@ class Play
         }
     }
 
+    if (this.player.alive === false){
+        this.resetLevel();
+    }
+
     this.player.update();
     this.enemies.forEach(enemy => {
-      enemy.update();
-    });
-
+        enemy.update();
+    });    
+    this.wallOfDeath.update();    
   }
 
 
   render(ctx) {
     this.collisionManager.render(ctx);
     this.level1.render();
+  }
+
+  resetLevel(){
+    this.wallOfDeath.collider.position.x = 0;    
   }
 }
