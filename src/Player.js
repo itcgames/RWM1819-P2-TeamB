@@ -9,8 +9,25 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
+<<<<<<< HEAD
       this.circle = new CircleCollider(new Vector2(500,100), 50);
     
+=======
+      this.pos = new Vector2(400, 1700)
+      this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
+
+      this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"), 
+                                                                152, 
+                                                                152, 
+                                                                0, 
+                                                                0, 
+                                                                this.pos.x, 
+                                                                this.pos.y, 
+                                                                gameNs.game.ctx);
+
+      this.sprite.setScale(0.66, 0.66);
+
+>>>>>>> ed5215c507b71e3802da14bb0dd82b9d3ed84bde
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
@@ -28,6 +45,11 @@ class Player
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
 
+      //Create SoundManager Object
+      this.sm = new SoundManager();
+      this.initSound();
+      this.isGrounded = false;
+
       this.previousV = new Vector2(0,0);
 
       this.MAX_SPEED_X = 6;
@@ -43,16 +65,17 @@ class Player
       }
       if(element == "w") {
         that.acceleration.y -= 6;
+        that.sm.playSound("jump", false);
       }
       if(element == "f") {
         that.fire();
+        that.sm.playSound("proj", false);
       }
       if(element == "Escape") {
         gameNs.game.menuHandler.goToScene("Pause");
       }
     })
   }
-
 
   /*
   * Method to handle the collision physics of the object
@@ -95,6 +118,12 @@ class Player
         this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
         this.velocity.y *= -this.resitution.y;
         this.p.setFired(false);
+
+        if (!this.isGrounded)
+        {
+          this.sm.playSound("land", false);
+        }
+        this.isGrounded = true;
       }
     }
   }
@@ -120,6 +149,11 @@ class Player
       this.velocity.x = 0;
     }
 
+    if (!this.circle.colliding)
+    {
+      this.isGrounded = false;
+    }
+
     // update the object position with the current velocity
     this.circle.shape.position.x += this.velocity.x;
     this.circle.shape.position.y += this.velocity.y;
@@ -139,16 +173,33 @@ class Player
     this.previousV = this.velocity;
     this.acceleration = new Vector2(0,0);
 
+    this.sprite.setPosition(this.circle.position.x - 50, 
+                            this.circle.position.y - 50);
+    this.sprite.rotate(1);
+
     this.pm.update();
   }
 
   render()
   {
+    //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
+    this.sprite.draw();
   }
 
   fire()
   {
     this.pm.fireProjectiles();
+  }
+
+  initSound()
+  {
+    //Initialize the soundmanager
+    this.sm.initialize();
+    //this.sm.setVolume(0.8);
+    //Load Jump Sound
+    this.sm.loadSound("jump", "assets/audio/player_jump.ogg");
+    this.sm.loadSound("land", "assets/audio/player_land.ogg");
+    this.sm.loadSound("proj", "assets/audio/player_proj.ogg");
   }
 }

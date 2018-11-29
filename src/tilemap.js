@@ -3,17 +3,15 @@ class TileMap
     /**
      *
      * Default constructor
-     * @param {*} level The level number you want a tilemap for(starting at 1)
-     * @param {*} tileSheetPath Path to the tilesheet for the level
+     * @param {*} level The level name passed as a string
      */
-    constructor(level, tileSheetPath)
+    constructor(level)
     {
-        this.path = tileSheetPath;
-        this.levelNumber = level - 1; //to get the index array
-        this.width = level1[this.levelNumber].width; //width in number of tiles
-        this.height = level1[this.levelNumber].height; //height in number of tiles
-        this.tileWidth = level1[this.levelNumber].tilewidth; //width in pixels of individual tiles
-        this.tileHeight = level1[this.levelNumber].tileheight; //height in pixels of individual tile
+        this.level = level - 1; //to get the index array
+        this.width = levels[0]["level1"].width; //width in number of tiles
+        this.height = levels[0]["level1"].height; //height in number of tiles
+        this.tileWidth = levels[0]["level1"].tilewidth; //width in pixels of individual tiles
+        this.tileHeight = levels[0]["level1"].tileheight; //height in pixels of individual tile
         this.frameLeft = 0;
         this.frameTop = 0;
     }
@@ -41,11 +39,9 @@ class TileMap
         {
             for(var j = 0; j < this.width; j++)
             {
-                this.dataArray[i / this.width][j] = level1[this.levelNumber].layers[0].data[i + j];
+                this.dataArray[i / this.width][j] = levels[0]["level1"]["layers"][0]["data"][i + j];
             }
         }
-
-        console.log(this.dataArray);
 
         for(var i = 0; i < this.height; i++)
         {
@@ -84,6 +80,9 @@ class TileMap
                 //so on for every tile type number
 
                 //lastly push the new tile to the 2d array
+
+                
+
 
                 this.tileArray[i].push(new Tile(j * this.tileWidth,
                     i * this.tileHeight,
