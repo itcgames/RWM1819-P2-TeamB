@@ -37,6 +37,7 @@ class Player
       this.sm = new SoundManager();
       this.initSound();
       this.isGrounded = false;
+      this.timer = 0;
 
       this.previousV = new Vector2(0,0);
 
@@ -108,7 +109,7 @@ class Player
           this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
           this.velocity.y *= -this.resitution.y;
           this.p.setFired(false);
-
+          this.timer = 0;
           if (!this.isGrounded) {
             this.sm.playSound("land", false);
           }
@@ -144,9 +145,16 @@ class Player
       }
 
       if (!this.circle.colliding) {
-        this.isGrounded = false;
-      }
+        this.timer += 1 / 60;
+        console.log("Timer: " + this.timer);
+        if (this.timer > 0.2)
+        {
+          this.isGrounded = false;
+          this.timer = 0;
+        }
 
+      }
+      //this.timer = 0;
       // update the object position with the current velocity
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;

@@ -80,8 +80,6 @@ class Game
         this.menuHandler.getCurrentSceneObject().containerDiv.appendChild(this.menu.instruction);
     }
 
-
-
     update() {
         var now = Date.now();
         gameNs.game.dt = (now - gameNs.game.prevTime);
