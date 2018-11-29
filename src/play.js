@@ -9,13 +9,17 @@ class Play
     this.collisionManager = new CollisionManager();
 
       this.levelArray = [];
+      this.levelArray.push(new Level("level1"));
       this.levelArray.push(new Level("level2"));
+      this.levelArray.push(new Level("level3"));
+      this.levelArray.push(new Level("level4"));
+      this.index = 0;
+      this.ctx;
 
       this.player = new Player();
-      for(var i = 0; i < this.levelArray[0].tileMap.height; i++)
+      for(var i = 0; i < this.levelArray[this.index].tileMap.height; i++)
       {
-        console.log(this.levelArray[0]);
-        this.levelArray[0].tileMap.tileArray[i].forEach(function(element)
+        this.levelArray[this.index].tileMap.tileArray[i].forEach(function(element)
         {
             if(element.collider) {
                 gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
@@ -26,6 +30,7 @@ class Play
     this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
+    this.collisionManager.addCircleCollider(this.levelArray[0].goal.collider);
 
     this.offSet = new Vector2(0, 0);
     this.actualCentre = new Vector2(0, 0);
@@ -43,6 +48,41 @@ class Play
     this.collisionManager.addBoxCollider(this.wallOfDeath.collider);
   }
 
+  nextLevel() {
+
+
+
+    for(var i = 0; i < this.levelArray[this.index].tileMap.height; i++)
+    {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function(element)
+      {
+          if(element.collider) {
+            gameNs.game.playScreen.collisionManager.removeBoxCollider(element.collider);
+          }
+      });
+    }
+
+
+    this.index++;
+
+    console.log(this.levelArray[this.index]);
+
+
+    for(var i = 0; i < this.levelArray[this.index].tileMap.height; i++)
+    {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function(element)
+      {
+          if(element.collider) {
+            gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+          }
+      });
+    }
+    this.player.circle.shape.position.x = 200;
+    this.player.circle.shape.position.y = 500;
+    this.actual0 = -200;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
   update() {
     //  Update game objects here.
     this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
@@ -58,8 +98,9 @@ class Play
             if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
                 this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
             } else {
-
-            }        
+              console.log("Next");
+              this.nextLevel();
+            }
         }
     }
 
@@ -88,13 +129,15 @@ class Play
 
 
   render(ctx) {
-    ctx.translate(-1, this.offSet.y);
+    this.ctx = ctx;
+    ctx.translate(-1, this.offSetY);
     this.collisionManager.render(ctx);
-    this.levelArray[0].render();
+    //this.level1.render();
+    this.levelArray[this.index].render();
     ctx.restore();
   }
 
   resetLevel() {
-    this.wallOfDeath.collider.position.x = 0;    
+    this.wallOfDeath.collider.position.x = 0;
   }
 }

@@ -1,7 +1,7 @@
 class Level
 {
     /**
-     * 
+     *
      * @param {*} level number of the level to init
      */
     constructor(level) {
@@ -33,4 +33,3 @@ class Level
     }
 
 }
-    

@@ -5,7 +5,7 @@ class Player
   constructor() {
 
   }
-  
+
   init() {
       //  Initialise game objects here
       that = this;
@@ -14,6 +14,7 @@ class Player
       this.pos = new Vector2(400, 1700)
       this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
 
+<<<<<<< HEAD
       this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"), 
                                                                 152, 
                                                                 152, 
@@ -24,6 +25,22 @@ class Player
                                                                 gameNs.game.ctx);
 
       this.sprite.setScale(0.66, 0.66);
+=======
+      this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"),
+                                                                152,
+                                                                152,
+                                                                0,
+                                                                0,
+                                                                this.pos.x,
+                                                                this.pos.y,
+                                                                gameNs.game.ctx);
+
+      this.sprite.setScale(0.66, 0.66);
+      this.alive = true;
+      this.spawnPoint = new Vector2(400, 1700);
+
+      this.circle = new CircleCollider(new Vector2(this.spawnPoint.x, this.spawnPoint.y), 50);
+>>>>>>> ca334e7bfa32fe86f5dae3521c73a5e07832cfc1
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
@@ -46,6 +63,7 @@ class Player
       this.sm = new SoundManager();
       this.initSound();
       this.isGrounded = false;
+      this.timer = 0;
 
       this.previousV = new Vector2(0,0);
 
@@ -119,7 +137,7 @@ class Player
           this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
           this.velocity.y *= -this.resitution.y;
           this.p.setFired(false);
-
+          this.timer = 0;
           if (!this.isGrounded) {
             this.sm.playSound("land", false);
           }
@@ -127,7 +145,7 @@ class Player
         }
       } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
-      }       
+      }
     }
   }
 
@@ -155,9 +173,16 @@ class Player
       }
 
       if (!this.circle.colliding) {
-        this.isGrounded = false;
-      }
+        this.timer += 1 / 60;
+        console.log("Timer: " + this.timer);
+        if (this.timer > 0.2)
+        {
+          this.isGrounded = false;
+          this.timer = 0;
+        }
 
+      }
+      //this.timer = 0;
       // update the object position with the current velocity
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
@@ -187,7 +212,11 @@ class Player
       this.resetPlayer();
     }
 
+<<<<<<< HEAD
     this.sprite.setPosition(this.circle.position.x - 50, 
+=======
+    this.sprite.setPosition(this.circle.position.x - 50,
+>>>>>>> ca334e7bfa32fe86f5dae3521c73a5e07832cfc1
                             this.circle.position.y - 50);
 
     this.pm.update();
