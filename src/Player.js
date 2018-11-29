@@ -5,12 +5,24 @@ class Player
   constructor() {
 
   }
-  
+
   init() {
       //  Initialise game objects here
       that = this;
       this.collision = false;
+      this.pos = new Vector2(400, 1700)
+      this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
 
+      this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"),
+                                                                152,
+                                                                152,
+                                                                0,
+                                                                0,
+                                                                this.pos.x,
+                                                                this.pos.y,
+                                                                gameNs.game.ctx);
+
+      this.sprite.setScale(0.66, 0.66);
       this.alive = true;
       this.spawnPoint = new Vector2(400, 1700);
 
@@ -117,7 +129,7 @@ class Player
         }
       } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
-      }       
+      }
     }
   }
 
@@ -189,12 +201,18 @@ class Player
       this.resetPlayer();
     }
 
+    this.sprite.setPosition(this.circle.position.x - 50,
+                            this.circle.position.y - 50);
+    this.sprite.rotate(1);
+
+    this.pm.update();
   }
 
   render()
   {
     //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
+    this.sprite.draw();
   }
 
   fire()

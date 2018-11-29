@@ -8,21 +8,29 @@ class Play
 
     this.collisionManager = new CollisionManager();
 
-    this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
-    this.level1.init();
+      this.levelArray = [];
+      this.levelArray.push(new Level("level1"));
+      this.levelArray.push(new Level("level2"));
+      this.levelArray.push(new Level("level3"));
+      this.levelArray.push(new Level("level4"));
+      this.index = 0;
+      this.ctx;
 
-    for (var i = 0; i < this.level1.height; i++) {
-        this.level1.tileArray[i].forEach(function(element) {
+      this.player = new Player();
+      for(var i = 0; i < this.levelArray[this.index].tileMap.height; i++)
+      {
+        this.levelArray[this.index].tileMap.tileArray[i].forEach(function(element)
+        {
             if(element.collider) {
                 gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
             }
         });
     }
 
-    this.player = new Player();
-    this.player.init();
-    this.collisionManager.addCircleCollider(this.player.circle);
-    this.offSetY = 0;
+      this.player.init();
+      this.collisionManager.addCircleCollider(this.player.circle);
+      this.collisionManager.addCircleCollider(this.levelArray[0].goal.collider);
+      this.offSetY = 0;
 
     this.actualCentre = 0;
     this.actual0 = -1000;
@@ -37,10 +45,45 @@ class Play
     for (var i = 0; i < 3; i++) {
         this.sawBlades.push(new Sawblade(new Vector2(i * 200, 100), 50));
         this.collisionManager.addCircleCollider(this.sawBlades[i].collider);
-    } 
-    
+    }
+
     this.wallOfDeath = new WallOfDeath(0, 1);
     this.collisionManager.addBoxCollider(this.wallOfDeath.collider);
+  }
+
+  nextLevel() {
+
+
+
+    for(var i = 0; i < this.levelArray[this.index].tileMap.height; i++)
+    {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function(element)
+      {
+          if(element.collider) {
+            gameNs.game.playScreen.collisionManager.removeBoxCollider(element.collider);
+          }
+      });
+    }
+
+
+    this.index++;
+
+    console.log(this.levelArray[this.index]);
+
+
+    for(var i = 0; i < this.levelArray[this.index].tileMap.height; i++)
+    {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function(element)
+      {
+          if(element.collider) {
+            gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+          }
+      });
+    }
+    this.player.circle.shape.position.x = 200;
+    this.player.circle.shape.position.y = 500;
+    this.actual0 = -200;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
   update() {
@@ -55,7 +98,12 @@ class Play
     var circleCollisionResults = this.collisionManager.checkCircleColliderArray();
     for (var j = 0; j < circleCollisionResults.length; j++) {
         if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
-            this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+            if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
+                this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+            } else {
+              console.log("Next");
+              this.nextLevel();
+            }
         }
     }
 
@@ -78,19 +126,21 @@ class Play
     this.player.update();
     this.enemies.forEach(enemy => {
         enemy.update();
-    });    
-    this.wallOfDeath.update();    
+    });
+    this.wallOfDeath.update();
   }
 
 
   render(ctx) {
+    this.ctx = ctx;
     ctx.translate(-1, this.offSetY);
     this.collisionManager.render(ctx);
-    this.level1.render();
+    //this.level1.render();
+    this.levelArray[this.index].render();
     ctx.restore();
   }
 
   resetLevel() {
-    this.wallOfDeath.collider.position.x = 0;    
+    this.wallOfDeath.collider.position.x = 0;
   }
 }
