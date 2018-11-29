@@ -13,7 +13,7 @@ class TileMap
         this.width = level2[0].width; //width in number of tiles
         this.height = level2[0].height; //height in number of tiles
         this.tileWidth = level2[0].tilewidth; //width in pixels of individual tiles
-        this.tileHeight = levle2[0].tileheight; //height in pixels of individual tile
+        this.tileHeight = level2[0].tileheight; //height in pixels of individual tile
         this.frameLeft = 0;
         this.frameTop = 0;
     }
