@@ -22,4 +22,12 @@ class Pause
       }
     });
   }
+
+  update() {
+
+  }
+
+  render(ctx) {
+    
+  }
 }

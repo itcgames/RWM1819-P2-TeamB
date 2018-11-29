@@ -24,4 +24,12 @@ class MainMenu
       }
     });
   }
+
+  update() {
+
+  }
+
+  render(ctx) {
+    
+  }
 }
