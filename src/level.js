@@ -32,7 +32,7 @@ class Level
                                      levels[0]["level1"]["layers"][i]["objects"][0]["height"],
                                      'platform',
                                      "vertical",
-                                     {minX: x, minY: y, maxX:x, maxY:y - 800});
+                                     {minX: x, minY: y - 800, maxX:x, maxY:y});
             }
         }
 

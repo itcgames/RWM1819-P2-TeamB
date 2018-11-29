@@ -7,7 +7,7 @@ class Play
   init() {
 
 	this.collisionManager = new CollisionManager();
-
+    this.platforms = [];
     this.levelArray = [];
 	this.levelArray.push(new Level("level2"));
 
@@ -29,7 +29,6 @@ class Play
 
     this.actualCentre = 0;
     this.actual0 = -1000;
-
     this.enemies = [];
     for (var i = 0; i < 1; i++) {
         this.enemies.push(new Enemy(new Vector2(i * 100, 100), new Vector2(i * 100 + 100, 100), 3));
@@ -53,7 +52,10 @@ class Play
         if (this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
             this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
             if(this.collisionManager.boxColliderArray[i].containsObjectTag('platform')){
-                this.interactableTest.updatePlayerPos(this.player);
+                var that = this;
+                this.platforms.forEach(function(element){
+                    element.updatePlayerPos(that.player);
+                })
             }	
         }
     }
@@ -80,17 +82,20 @@ class Play
     }
 
     this.actual0 += this.offSetY;
+    gameNs.game.relativeCanvas.y = -this.actual0;
 
     this.player.update();
     this.enemies.forEach(enemy => {
         enemy.update();
     });    
-    this.wallOfDeath.update();    
+    this.wallOfDeath.update();  
   }
 
 
   render(ctx) {
+    
     ctx.translate(-1, this.offSetY);
+    gameNs.game.relativeCanvas.x++;
     this.collisionManager.render(ctx);
     //this.level1.render();
     this.levelArray[0].render();

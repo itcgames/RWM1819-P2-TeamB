@@ -87,7 +87,7 @@ class Player
   handleCollision(entity)
   {
     if(entity != undefined){
-      if (entity.containsObjectTag('ground')) {
+      if (entity.containsObjectTag('ground') || entity.containsObjectTag('platform')) {
         // colliding with the right side of the entity
         if (this.circle.position.x < entity.position.x) {
           if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
@@ -155,7 +155,6 @@ class Player
 
       if (!this.circle.colliding) {
         this.timer += 1 / 60;
-        console.log("Timer: " + this.timer);
         if (this.timer > 0.2)
         {
           this.isGrounded = false;

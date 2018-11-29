@@ -8,10 +8,14 @@ class Interactable{
         
         this.sprite; // TODO: add sprite entity
         this.collider = new BoxCollider(new Vector2(x,y), width, height, [tag], ['saw']);
+        gameNs.game.playScreen.collisionManager.addBoxCollider(this.collider);
+        gameNs.game.playScreen.platforms.push(this);
         this.draggable = new Draggable(this);
         this.draggable.setAxisLock(axisLock, range);
         this.range = range;
-
+        this.offSet = gameNs.game.relativeCanvas;
+        this.draggable.setOffSet(this.offSet);
+        
         this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/levelAssets/PNG Metal/slice03_03.png"),
                                  width,
                                  height,
@@ -100,10 +104,12 @@ class Interactable{
     *   when the mouse has stopped colliding with the interactable return it to it's default state
     */
     hoverEnd(){
-        // TODO: reset the visuals to default state
         this.colour = this.hoverOff;
     }
 
+    /*
+    *   when the mouse has stopped colliding with the interactable return it to it's default state
+    */
     render(){
         gameNs.game.ctx.beginPath();
         gameNs.game.ctx.moveTo(this.range.minX + this.collider.width / 2 ,this.range.minY + this.collider.height / 2);
