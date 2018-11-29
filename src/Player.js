@@ -14,18 +14,6 @@ class Player
       this.pos = new Vector2(400, 1700)
       this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
 
-<<<<<<< HEAD
-      this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"), 
-                                                                152, 
-                                                                152, 
-                                                                0, 
-                                                                0, 
-                                                                this.pos.x, 
-                                                                this.pos.y, 
-                                                                gameNs.game.ctx);
-
-      this.sprite.setScale(0.66, 0.66);
-=======
       this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"),
                                                                 152,
                                                                 152,
@@ -37,10 +25,6 @@ class Player
 
       this.sprite.setScale(0.66, 0.66);
       this.alive = true;
-      this.spawnPoint = new Vector2(400, 1700);
-
-      this.circle = new CircleCollider(new Vector2(this.spawnPoint.x, this.spawnPoint.y), 50);
->>>>>>> ca334e7bfa32fe86f5dae3521c73a5e07832cfc1
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
@@ -212,11 +196,7 @@ class Player
       this.resetPlayer();
     }
 
-<<<<<<< HEAD
-    this.sprite.setPosition(this.circle.position.x - 50, 
-=======
     this.sprite.setPosition(this.circle.position.x - 50,
->>>>>>> ca334e7bfa32fe86f5dae3521c73a5e07832cfc1
                             this.circle.position.y - 50);
 
     this.pm.update();
