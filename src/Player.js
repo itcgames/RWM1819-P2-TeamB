@@ -58,12 +58,10 @@ class Player
     keys.forEach(function(element) {
       if(element == "a") {
         that.acceleration.x -= 1;
-        this.sprite.rotate(-10);
       }
 
       if(element == "d") {
         that.acceleration.x += 1;
-        this.sprite.rotate(10);
       }
 
       if(element == "w") {
@@ -197,6 +195,9 @@ class Player
 
     this.sprite.setPosition(this.circle.position.x - 50,
                             this.circle.position.y - 50);
+
+
+    this.sprite.rotate(this.velocity.x);
 
     this.pm.update();
   }
