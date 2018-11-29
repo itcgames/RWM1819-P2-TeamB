@@ -26,6 +26,13 @@ class Level {
       });
     }
 
+    this.platforms = [];
+    if(levels[level]["layers"]["Interactables"] !== undefined){
+      levels[level]["layers"]["AIMarkers"]["objects"].forEach(element => {
+        this.platforms.push(new Interactable(element["x"], element["y"],element["width"], element["height"], 'platform', element["name"], {minX: x, minY: y - 800, maxX:x, maxY:y}))
+      });
+    }
+
     this.goal.sprite.setScale(0.5, 0.5);
     this.goal.sprite.setPosition(this.goal.x - this.goal.sprite.getGlobalBounds().width / 2, this.goal.y - this.goal.sprite.getGlobalBounds().height / 2);
   }
@@ -36,6 +43,9 @@ class Level {
     });
     this.sawBlades.forEach(blade => {
       blade.render();
+    });
+    this.platforms.forEach(platform => {
+      platform.render();
     });
     this.tileMap.render();
     this.goal.render();

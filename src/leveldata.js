@@ -23,11 +23,13 @@ var levels = {
           "id": 2,
           "name": "",
           "rotation": 0,
-          "type": "",
+          "type": "vertical",
           "visible": true,
           "width": 138,
           "x": 1960.66666666667,
-          "y": 1540.33333333333
+          "y": 1540.33333333333,
+          "maxX": 1960.66666666667,
+          "maxY": 1540.33333333333
         }],
         "opacity": 1,
         "type": "objectgroup",
