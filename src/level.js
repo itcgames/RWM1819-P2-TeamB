@@ -1,7 +1,7 @@
 class Level
 {
     /**
-     * 
+     *
      * @param {*} level number of the level to init
      */
     constructor(level)
@@ -9,14 +9,13 @@ class Level
         this.level = level;
         this.tileMap = new TileMap(this.level);
         this.tileMap.init();
-        console.log(levels);
         //this.goal = new Goal(levels[this.level].layers[])
-        for (var i = 0; i < levels[0]["level1"]["layers"].length; i++)
+        for (var i = 0; i < levels[0][level]["layers"].length; i++)
         {
-            if(levels[0]["level1"]["layers"][i]["name"] == "GoalMarker")
+            if(levels[0][level]["layers"][i]["name"] == "GoalMarker")
             {
-                this.goal = new Goal(levels[0]["level1"]["layers"][i]["objects"][0]["x"],
-                                     levels[0]["level1"]["layers"][i]["objects"][0]["y"],
+                this.goal = new Goal(levels[0][level]["layers"][i]["objects"][0]["x"],
+                                     levels[0][level]["layers"][i]["objects"][0]["y"],
                                      0,
                                      0,
                                      210,
@@ -36,4 +35,3 @@ class Level
     }
 
 }
-    

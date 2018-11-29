@@ -14,9 +14,9 @@ class Goal
 
         this.x = xPos;
         this.y = yPos;
-        
-        this.collider = new BoxCollider(new Vector2(xPos, yPos), width, height, ['goal']);
-    
+
+        this.collider = new CircleCollider(new Vector2(xPos - width / 2, yPos), width / 4, ['goal']);
+
 
     }
 
