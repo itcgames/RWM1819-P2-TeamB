@@ -19,8 +19,11 @@ class MainMenu
   menuKeys(keys) {
     keys.forEach(function(element) {
       if(element == "Enter") {
-        gameNs.game.menuHandler.goToScene("Play");
-        gameNs.game.ctx.translate(0, -1000);
+        if(gameNs.game.menuHandler.getCurrentSceneObject()._id == "Scene-Menu") {
+          gameNs.game.menuHandler.goToScene("Play");
+          gameNs.game.ctx.translate(0, -1000);
+        }
+
       }
     });
   }
@@ -30,6 +33,6 @@ class MainMenu
   }
 
   render(ctx) {
-    
+
   }
 }

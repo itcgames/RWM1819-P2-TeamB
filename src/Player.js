@@ -158,7 +158,6 @@ class Player
 
       if (!this.circle.colliding) {
         this.timer += 1 / 60;
-        console.log("Timer: " + this.timer);
         if (this.timer > 0.2)
         {
           this.isGrounded = false;
@@ -203,7 +202,9 @@ class Player
 
     this.sprite.setPosition(this.circle.position.x - 50,
                             this.circle.position.y - 50);
-    this.sprite.rotate(1);
+
+
+    this.sprite.rotate(this.velocity.x);
 
     this.pm.update();
   }
