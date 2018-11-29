@@ -34,7 +34,8 @@ var level1 = [
         ];
 
 var level2 = [ //0 = tilelayer, 1 = interactable, 2 = sawblademarkers, 3 = AI markers, 4 = Goal marker, 5 = start marker
-                { "height":30,
+                { 
+                "height":30,
                 "infinite":false,
                 "layers":[
                         {
@@ -243,7 +244,8 @@ var level2 = [ //0 = tilelayer, 1 = interactable, 2 = sawblademarkers, 3 = AI ma
 }];
 
 var level3 = [ //0 = tile data, 1 = start, 2 = goal
-                { "height":20,
+                { 
+                        "height":20,
                         "infinite":false,
                         "layers":[
                         {
@@ -321,7 +323,8 @@ var level3 = [ //0 = tile data, 1 = start, 2 = goal
 
 level4 = [
         
-        { "height":20,
+        { 
+                        "height":20,
                         "infinite":false,
                         "layers":[
                         {
@@ -549,4 +552,170 @@ level4 = [
                         "type":"map",
                         "version":1.2,
                         "width":50
+}];
+
+var level5 = [
+        {         
+                        "height":30,
+                        "infinite":false,
+                        "layers":[
+                        {
+                                "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, 26, 26, 0, 0, 0, 0, 26, 26, 26, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 30, 30, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 30, 30, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                "height":30,
+                                "id":1,
+                                "name":"TileLayer",
+                                "opacity":1,
+                                "type":"tilelayer",
+                                "visible":true,
+                                "width":14,
+                                "x":0,
+                                "y":0
+                        }, 
+                        {
+                                "draworder":"topdown",
+                                "id":2,
+                                "name":"SawBladeMarkers",
+                                "objects":[
+                                {
+                                        "height":0,
+                                        "id":1,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":490,
+                                        "y":1750
+                                }, 
+                                {
+                                        "height":0,
+                                        "id":2,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":770,
+                                        "y":1540
+                                }, 
+                                {
+                                        "height":0,
+                                        "id":3,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":490,
+                                        "y":1330
+                                }, 
+                                {
+                                        "height":0,
+                                        "id":4,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":770,
+                                        "y":1120
+                                }, 
+                                {
+                                        "height":0,
+                                        "id":5,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":490,
+                                        "y":910
+                                }, 
+                                {
+                                        "height":0,
+                                        "id":6,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":770,
+                                        "y":700
+                                }, 
+                                {
+                                        "height":0,
+                                        "id":7,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":490,
+                                        "y":490
+                                }],
+                                "opacity":1,
+                                "type":"objectgroup",
+                                "visible":true,
+                                "x":0,
+                                "y":0
+                        }, 
+                        {
+                                "draworder":"topdown",
+                                "id":3,
+                                "name":"StartMarker",
+                                "objects":[
+                                {
+                                        "height":0,
+                                        "id":8,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":70,
+                                        "y":1890
+                                }],
+                                "opacity":1,
+                                "type":"objectgroup",
+                                "visible":true,
+                                "x":0,
+                                "y":0
+                        }, 
+                        {
+                                "draworder":"topdown",
+                                "id":4,
+                                "name":"GoalMarker",
+                                "objects":[
+                                {
+                                        "height":0,
+                                        "id":9,
+                                        "name":"",
+                                        "rotation":0,
+                                        "type":"",
+                                        "visible":true,
+                                        "width":0,
+                                        "x":910,
+                                        "y":280
+                                }],
+                                "opacity":1,
+                                "type":"objectgroup",
+                                "visible":true,
+                                "x":0,
+                                "y":0
+                        }],
+                        "nextlayerid":5,
+                        "nextobjectid":10,
+                        "orientation":"orthogonal",
+                        "renderorder":"right-down",
+                        "tiledversion":"1.2.1",
+                        "tileheight":70,
+                        "tilesets":[
+                        {
+                                "firstgid":1,
+                                "source":"grassSheet.tsx"
+                        }],
+                        "tilewidth":70,
+                        "type":"map",
+                        "version":1.2,
+                        "width":14
 }];
