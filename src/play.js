@@ -8,13 +8,14 @@ class Play
 
       this.collisionManager = new CollisionManager();
 
-      this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
-      this.level1.init();
+      this.levelArray = [];
+      this.levelArray.push(new Level("level2"));
 
       this.player = new Player();
-      for(var i = 0; i < this.level1.height; i++)
+      for(var i = 0; i < this.levelArray[0].tileMap.height; i++)
       {
-        this.level1.tileArray[i].forEach(function(element)
+        console.log(this.levelArray[0]);
+        this.levelArray[0].tileMap.tileArray[i].forEach(function(element)
         {
             if(element.collider) {
               gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
@@ -60,7 +61,8 @@ class Play
   render(ctx) {
     ctx.translate(-1, this.offSetY);
     this.collisionManager.render(ctx);
-    this.level1.render();
+    //this.level1.render();
+    this.levelArray[0].render();
     ctx.restore();
   }
 }

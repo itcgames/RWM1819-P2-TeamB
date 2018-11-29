@@ -9,12 +9,19 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
+      this.pos = new Vector2(400, 1700)
+      this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
 
-<<<<<<< Updated upstream
-      this.circle = new CircleCollider(new Vector2(400,1700), 50);
-=======
-      this.circle = new CircleCollider(new Vector2(500,700), 50);
->>>>>>> Stashed changes
+      this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"), 
+                                                                152, 
+                                                                152, 
+                                                                0, 
+                                                                0, 
+                                                                this.pos.x, 
+                                                                this.pos.y, 
+                                                                gameNs.game.ctx);
+
+      this.sprite.setScale(0.66, 0.66);
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
@@ -161,6 +168,10 @@ class Player
     this.previousV = this.velocity;
     this.acceleration = new Vector2(0,0);
 
+    this.sprite.setPosition(this.circle.position.x - 50, 
+                            this.circle.position.y - 50);
+    this.sprite.rotate(1);
+
     this.pm.update();
   }
 
@@ -168,6 +179,7 @@ class Player
   {
     //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
+    this.sprite.draw();
   }
 
   fire()
