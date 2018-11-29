@@ -160,7 +160,7 @@ class Player
     this.pm.update();
   }
 
-  render() 
+  render()
   {
     //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
