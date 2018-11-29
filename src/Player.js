@@ -9,15 +9,9 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> implementing new drag and drop implementation
       this.circle = new CircleCollider(new Vector2(500,100), 50);
     
       this.gravity = new Vector2(0, .098);
-<<<<<<< HEAD
       this.resitution = new Vector2(1.2, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0); //
@@ -37,12 +31,6 @@ class Player
       this.previousV = new Vector2(0,0);
 
       this.MAX_SPEED_X = 6;
-=======
-      this.resitution = new Vector2(.50, .50); // how much bounce as applied to the ball
-      this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
-      this.velocity = new Vector2(0,0); //
-      this.acceleration = new Vector2(0,0);
->>>>>>> implementing new drag and drop implementation
   }
 
   playerKeys(keys) {
@@ -56,7 +44,6 @@ class Player
       if(element == "w") {
         that.acceleration.y -= 6;
       }
-<<<<<<< HEAD
       if(element == "f") {
         that.fire();
       }
@@ -67,11 +54,6 @@ class Player
   }
 
 
-=======
-    });
-  }
-
->>>>>>> implementing new drag and drop implementation
   /*
   * Method to handle the collision physics of the object
   * @arg entity - this is an entity that is passed only if it has collided with the object
@@ -87,10 +69,7 @@ class Player
               this.circle.shape.position.x = entity.shape.position.x - this.circle.shape.radius;
               this.velocity.x *= -this.resitution.x;
               console.log("right");
-<<<<<<< HEAD
               this.p.setFired(false);
-=======
->>>>>>> implementing new drag and drop implementation
             }
         }
 
@@ -101,10 +80,7 @@ class Player
             this.circle.shape.position.x = entity.shape.position.x + entity.shape.width + this.circle.shape.radius;
             this.velocity.x *= -this.resitution.x;
             console.log("left");
-<<<<<<< HEAD
             this.p.setFired(false);
-=======
->>>>>>> implementing new drag and drop implementation
           }
       }
 
@@ -148,7 +124,6 @@ class Player
     this.circle.shape.position.x += this.velocity.x;
     this.circle.shape.position.y += this.velocity.y;
 
-<<<<<<< HEAD
     if (this.p.IsFired())
     {
       this.velocity = this.p.getVelocity();
@@ -165,9 +140,6 @@ class Player
     this.acceleration = new Vector2(0,0);
 
     this.pm.update();
-=======
-    this.acceleration = new Vector2(0,0); // reset the acceleration vector after use
->>>>>>> implementing new drag and drop implementation
   }
 
   render()
