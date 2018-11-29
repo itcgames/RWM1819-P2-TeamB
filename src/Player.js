@@ -29,6 +29,11 @@ class Player
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
 
+      //Create SoundManager Object
+      this.sm = new SoundManager();
+      this.initSound();
+      this.isGrounded = false;
+
       this.previousV = new Vector2(0,0);
 
       this.MAX_SPEED_X = 6;
@@ -44,16 +49,17 @@ class Player
       }
       if(element == "w") {
         that.acceleration.y -= 6;
+        that.sm.playSound("jump", false);
       }
       if(element == "f") {
         that.fire();
+        that.sm.playSound("proj", false);
       }
       if(element == "Escape") {
         gameNs.game.menuHandler.goToScene("Pause");
       }
     })
   }
-
 
   /*
   * Method to handle the collision physics of the object
@@ -96,6 +102,12 @@ class Player
         this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
         this.velocity.y *= -this.resitution.y;
         this.p.setFired(false);
+
+        if (!this.isGrounded)
+        {
+          this.sm.playSound("land", false);
+        }
+        this.isGrounded = true;
       }
     }
   }
@@ -119,6 +131,11 @@ class Player
     }
     if(this.velocity.x < .005 && this.velocity.x > -.005){
       this.velocity.x = 0;
+    }
+
+    if (!this.circle.colliding)
+    {
+      this.isGrounded = false;
     }
 
     // update the object position with the current velocity
@@ -145,11 +162,23 @@ class Player
 
   render()
   {
+    //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
   }
 
   fire()
   {
     this.pm.fireProjectiles();
+  }
+
+  initSound()
+  {
+    //Initialize the soundmanager
+    this.sm.initialize();
+    //this.sm.setVolume(0.8);
+    //Load Jump Sound
+    this.sm.loadSound("jump", "assets/audio/player_jump.ogg");
+    this.sm.loadSound("land", "assets/audio/player_land.ogg");
+    this.sm.loadSound("proj", "assets/audio/player_proj.ogg");
   }
 }
