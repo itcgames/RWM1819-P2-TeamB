@@ -24,7 +24,10 @@ class Play
 
       this.player.init();
       this.collisionManager.addCircleCollider(this.player.circle);
+      this.offSetY = 0;
 
+      this.actualCentre = 0;
+      this.actual0 = 0;
   }
 
   update() {
@@ -37,11 +40,27 @@ class Play
         }
 
       this.player.update();
+
+      this.actualCentre = this.player.circle.shape.position.y + this.actual0 - 500;
+
+      if(this.actualCentre < -10) {
+        this.offSetY = 3;
+      }
+      else if(this.actualCentre > 10) {
+        this.offSetY = -3;
+      }
+      else {
+        this.offSetY = 0;
+      }
+
+      this.actual0 += this.offSetY;
   }
 
 
   render(ctx) {
+    ctx.translate(-2, this.offSetY);
     this.collisionManager.render(ctx);
     this.level1.render();
+    ctx.restore();
   }
 }
