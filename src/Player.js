@@ -158,7 +158,6 @@ class Player
 
       if (!this.circle.colliding) {
         this.timer += 1 / 60;
-        console.log("Timer: " + this.timer);
         if (this.timer > 0.2)
         {
           this.isGrounded = false;

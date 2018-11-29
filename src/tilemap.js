@@ -8,10 +8,10 @@ class TileMap
     constructor(level)
     {
         this.level = level;
-        this.width = levels[0][level].width; //width in number of tiles
-        this.height = levels[0][level].height; //height in number of tiles
-        this.tileWidth = levels[0][level].tilewidth; //width in pixels of individual tiles
-        this.tileHeight = levels[0][level].tileheight; //height in pixels of individual tile
+        this.width = levels[level].width; //width in number of tiles
+        this.height = levels[level].height; //height in number of tiles
+        this.tileWidth = levels[level].tilewidth; //width in pixels of individual tiles
+        this.tileHeight = levels[level].tileheight; //height in pixels of individual tile
         this.frameLeft = 0;
         this.frameTop = 0;
         this.tileTypes = Object.freeze({'Air':0, 'Grass':26, 'Dirt':30, 'Right lip':18, 'Left lip':25});
