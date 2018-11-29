@@ -10,7 +10,7 @@ class Player
       that = this;
       this.collision = false;
 
-      this.circle = new CircleCollider(new Vector2(500,100), 50);
+      this.circle = new CircleCollider(new Vector2(500,500), 50);
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
