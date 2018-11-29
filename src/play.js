@@ -26,22 +26,18 @@ class Play
     this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
-    this.offSetY = 0;
 
-    this.actualCentre = 0;
-    this.actual0 = -1000;
+    this.offSet = new Vector2(0, 0);
+    this.actualCentre = new Vector2(0, 0);
+    this.actual0 = new Vector2(0, -1000);
 
-    this.enemies = [];
-    for (var i = 0; i < 1; i++) {
-        this.enemies.push(new Enemy(new Vector2(i * 100, 100), new Vector2(i * 100 + 100, 100), 3));
-        this.collisionManager.addCircleCollider(this.enemies[i].collider);
-    }
+    this.levelArray[0].enemies.forEach(enemy => {
+        this.collisionManager.addCircleCollider(enemy.collider);
+    });
 
-    this.sawBlades = [];
-    for (var i = 0; i < 3; i++) {
-        this.sawBlades.push(new Sawblade(new Vector2(i * 200, 100), 50));
-        this.collisionManager.addCircleCollider(this.sawBlades[i].collider);
-    } 
+    this.levelArray[0].sawBlades.forEach(sawBlade => {
+        this.collisionManager.addCircleCollider(sawBlade.collider);
+    })
     
     this.wallOfDeath = new WallOfDeath(0, 1);
     this.collisionManager.addBoxCollider(this.wallOfDeath.collider);
@@ -59,7 +55,11 @@ class Play
     var circleCollisionResults = this.collisionManager.checkCircleColliderArray();
     for (var j = 0; j < circleCollisionResults.length; j++) {
         if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
-            this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+            if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
+                this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+            } else {
+
+            }        
         }
     }
 
@@ -67,30 +67,29 @@ class Play
         this.resetLevel();
     }
 
-    this.actualCentre = this.player.circle.shape.position.y + this.actual0 - 500;
+    this.actualCentre.y = this.player.circle.position.y + this.actual0.y - 500;
 
-    if (this.actualCentre < -10) {
-        this.offSetY = 3;
-    } else if (this.actualCentre > 10) {
-        this.offSetY = -3;
+    if (this.actualCentre.y < -10) {
+        this.offSet.y = 3;
+    } else if (this.actualCentre.y > 10) {
+        this.offSet.y = -3;
     } else {
-        this.offSetY = 0;
+        this.offSet.y = 0;
     }
 
-    this.actual0 += this.offSetY;
+    this.actual0 = this.actual0.add(this.offSet);
 
     this.player.update();
-    this.enemies.forEach(enemy => {
+    this.levelArray[0].enemies.forEach(enemy => {
         enemy.update();
-    });    
+    });   
     this.wallOfDeath.update();    
   }
 
 
   render(ctx) {
-    ctx.translate(-1, this.offSetY);
+    ctx.translate(-1, this.offSet.y);
     this.collisionManager.render(ctx);
-    //this.level1.render();
     this.levelArray[0].render();
     ctx.restore();
   }

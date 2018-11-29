@@ -7,6 +7,6 @@ class Enemy extends Obstacle {
      * @param {Scalar} speed
      */
     constructor(startPoint, endPoint, speed) {
-        super(new CircleCollider(new Vector2(startPoint.x, startPoint.y), 10, ['obstacle'], ['ground', 'obstacle']), startPoint, endPoint, speed);
+        super(new CircleCollider(new Vector2(startPoint.x, startPoint.y), 50, ['obstacle'], ['ground', 'obstacle']), startPoint, endPoint, speed);
     }
 }

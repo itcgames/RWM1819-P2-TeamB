@@ -8,10 +8,10 @@ class TileMap
     constructor(level)
     {
         this.level = level - 1; //to get the index array
-        this.width = levels[0]["level1"].width; //width in number of tiles
-        this.height = levels[0]["level1"].height; //height in number of tiles
-        this.tileWidth = levels[0]["level1"].tilewidth; //width in pixels of individual tiles
-        this.tileHeight = levels[0]["level1"].tileheight; //height in pixels of individual tile
+        this.width = levels["level1"].width; //width in number of tiles
+        this.height = levels["level1"].height; //height in number of tiles
+        this.tileWidth = levels["level1"].tilewidth; //width in pixels of individual tiles
+        this.tileHeight = levels["level1"].tileheight; //height in pixels of individual tile
         this.frameLeft = 0;
         this.frameTop = 0;
         this.tileTypes = Object.freeze({'Air':0, 'Grass':26, 'Dirt':30, 'Right lip':18, 'Left lip':25});
@@ -37,7 +37,7 @@ class TileMap
         {
             for(var j = 0; j < this.width; j++)
             {
-                this.dataArray[i / this.width][j] = levels[0]["level1"]["layers"][0]["data"][i + j];
+                this.dataArray[i / this.width][j] = levels["level1"]["layers"]["TileLayer"]["data"][i + j];
             }
         }
 
@@ -64,20 +64,13 @@ class TileMap
                 }
 
                 //lastly push the new tile to the 2d array
-
-                
-
-
                 this.tileArray[i].push(new Tile(j * this.tileWidth,
-                    i * this.tileHeight,
-                    this.frameLeft,
-                    this.frameTop,
-                    this.tileWidth,
-                    this.tileHeight,
-                    this.dataArray[i][j]));
-
-
-
+                                                i * this.tileHeight,
+                                                this.frameLeft,
+                                                this.frameTop,
+                                                this.tileWidth,
+                                                this.tileHeight,
+                                                this.dataArray[i][j]));
             }
         }
     }

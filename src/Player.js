@@ -56,10 +56,12 @@ class Player
     keys.forEach(function(element) {
       if(element == "a") {
         that.acceleration.x -= 1;
+        this.sprite.rotate(-10);
       }
 
       if(element == "d") {
         that.acceleration.x += 1;
+        this.sprite.rotate(10);
       }
 
       if(element == "w") {
@@ -160,20 +162,15 @@ class Player
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
 
-      if (this.p.velocityX > 100)
-      {
+      if (this.p.velocityX > 100) {
         this.p.velocityX = 100;
-      }
-      else if (this.p.velocityX < -100)
-      {
+      } else if (this.p.velocityX < -100) {
         this.p.velocityX = -100;
       }
-      if (this.p.velocityY > 100)
-      {
+
+      if (this.p.velocityY > 100) {
         this.p.velocityY = 100;
-      }
-      else if (this.p.velocityY < -100)
-      {
+      } else if (this.p.velocityY < -100) {
         this.p.velocityY = -100;
       }
 
@@ -192,7 +189,6 @@ class Player
 
     this.sprite.setPosition(this.circle.position.x - 50, 
                             this.circle.position.y - 50);
-    this.sprite.rotate(1);
 
     this.pm.update();
   }
