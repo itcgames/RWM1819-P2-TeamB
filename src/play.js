@@ -11,10 +11,8 @@ class Play
     this.level1 = new TileMap(1, "../assets/levels/grassSheet.png");
     this.level1.init();
 
-    for(var i = 0; i < this.level1.height; i++)
-    {
-        this.level1.tileArray[i].forEach(function(element)
-        {
+    for (var i = 0; i < this.level1.height; i++) {
+        this.level1.tileArray[i].forEach(function(element) {
             if(element.collider) {
                 gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
             }
@@ -36,7 +34,7 @@ class Play
     }
 
     this.sawBlades = [];
-    for (var i = 0; i < 3; i++){
+    for (var i = 0; i < 3; i++) {
         this.sawBlades.push(new Sawblade(new Vector2(i * 200, 100), 50));
         this.collisionManager.addCircleCollider(this.sawBlades[i].collider);
     } 
@@ -48,8 +46,8 @@ class Play
   update() {
     //  Update game objects here.
     this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
-    for(var i = 0; i < this.collisionResults['BoxResults'].length; i++){
-        if(this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
+    for (var i = 0; i < this.collisionResults['BoxResults'].length; i++) {
+        if (this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
             this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
         }
     }
@@ -61,20 +59,18 @@ class Play
         }
     }
 
-    if (this.player.alive === false){
+    if (this.player.alive === false) {
         this.resetLevel();
     }
 
     this.actualCentre = this.player.circle.shape.position.y + this.actual0 - 500;
 
-    if(this.actualCentre < -10) {
-    this.offSetY = 3;
-    }
-    else if(this.actualCentre > 10) {
-    this.offSetY = -3;
-    }
-    else {
-    this.offSetY = 0;
+    if (this.actualCentre < -10) {
+        this.offSetY = 3;
+    } else if (this.actualCentre > 10) {
+        this.offSetY = -3;
+    } else {
+        this.offSetY = 0;
     }
 
     this.actual0 += this.offSetY;
@@ -94,7 +90,7 @@ class Play
     ctx.restore();
   }
 
-  resetLevel(){
+  resetLevel() {
     this.wallOfDeath.collider.position.x = 0;    
   }
 }

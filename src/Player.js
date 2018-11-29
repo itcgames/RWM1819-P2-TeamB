@@ -19,7 +19,7 @@ class Player
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
-      this.velocity = new Vector2(0,0); //
+      this.velocity = new Vector2(0,0);
       this.acceleration = new Vector2(0,0);
       this.previousV = new Vector2(0,0);
 
@@ -48,17 +48,21 @@ class Player
       if(element == "a") {
         that.acceleration.x -= 1;
       }
+
       if(element == "d") {
         that.acceleration.x += 1;
       }
+
       if(element == "w") {
         that.acceleration.y -= 6;
         that.sm.playSound("jump", false);
       }
+
       if(element == "f") {
         that.fire();
         that.sm.playSound("proj", false);
       }
+
       if(element == "Escape") {
         gameNs.game.menuHandler.goToScene("Pause");
       }
@@ -75,35 +79,32 @@ class Player
     if(entity != undefined){
       if (entity.containsObjectTag('ground')) {
         // colliding with the right side of the entity
-        if(this.circle.position.x < entity.position.x){
-          if(this.circle.position.y - this.circle.radius < entity.position.y + entity.height
-            && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4){
+        if (this.circle.position.x < entity.position.x) {
+          if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
               this.circle.position.x = entity.position.x - this.circle.radius;
               this.velocity.x *= -this.resitution.x;
-              console.log("right");
               this.p.setFired(false);
             }
         }
 
         // colliding with the right side of the entity
-        if(this.circle.position.x > entity.position.x + entity.width){
-          if(this.circle.position.y - this.circle.radius < entity.position.y + entity.height
-            && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4){
+        if (this.circle.position.x > entity.position.x + entity.width) {
+          if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
               this.circle.position.x = entity.position.x + entity.width + this.circle.radius;
               this.velocity.x *= -this.resitution.x;
-              console.log("left");
               this.p.setFired(false);
             }
         }
 
         // colliding with the bottom side of the entity
-        if(this.circle.position.y > entity.position.y + entity.height){
+        if (this.circle.position.y > entity.position.y + entity.height) {
           this.circle.position.y = entity.position.y + entity.height + this.circle.radius;
             this.velocity.y *= -this.resitution.y;
             this.p.setFired(false);
         }
+
         // colliding with the top side of the entity
-        if(this.circle.shape.position.y  < entity.shape.position.y){
+        if (this.circle.shape.position.y  < entity.shape.position.y) {
           this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
           this.velocity.y *= -this.resitution.y;
           this.p.setFired(false);
@@ -113,7 +114,7 @@ class Player
           }
           this.isGrounded = true;
         }
-      }else if (entity.containsObjectTag('obstacle')) {
+      } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
       }       
     }
@@ -124,7 +125,7 @@ class Player
       this.render();
       this.acceleration.y += this.gravity.y;
 
-      if(this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
+      if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
         this.velocity.x += this.acceleration.x;
       }
 
@@ -134,15 +135,15 @@ class Player
       this.velocity.y *= this.friction.y;
 
       // threshold for the velocity, come to rest after a while
-      if(this.velocity.y < .05 && this.velocity.y > -.05){
+      if (this.velocity.y < .05 && this.velocity.y > -.05) {
         this.velocity.y = 0;
       }
-      if(this.velocity.x < .005 && this.velocity.x > -.005){
+
+      if (this.velocity.x < .005 && this.velocity.x > -.005) {
         this.velocity.x = 0;
       }
 
-      if (!this.circle.colliding)
-      {
+      if (!this.circle.colliding) {
         this.isGrounded = false;
       }
 
@@ -150,21 +151,14 @@ class Player
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
 
-      if (this.p.IsFired())
-      {
+      if (this.p.IsFired()) {
         this.velocity = this.p.getVelocity();
-      }
-      else
-      {
+      } else {
         this.p.setPosition(this.circle.position.x, this.circle.position.y);
       }
 
-      //this.velocity = this.p.getVelocity();
-      //this.circle.position = this.p.getPosition();
-
       this.previousV = this.velocity;
       this.acceleration = new Vector2(0,0);
-
       this.pm.update();
     } else {
       this.resetPlayer();
