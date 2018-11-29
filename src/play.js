@@ -1,5 +1,4 @@
-class Play
-{
+class Play {
   constructor() {
 
   }
@@ -11,38 +10,77 @@ class Play
     this.levelArray = [];
 	this.levelArray.push(new Level("level2"));
 
+    this.levelArray = [];
+    this.levelArray.push(new Level("level1"));
+    this.levelArray.push(new Level("level2"));
+    this.levelArray.push(new Level("level3"));
+    this.levelArray.push(new Level("level4"));
+    this.index = 0;
+    this.ctx;
+
     this.player = new Player();
-    for(var i = 0; i < this.levelArray[0].tileMap.height; i++)
-    {
-      console.log(this.levelArray[0]);
-      this.levelArray[0].tileMap.tileArray[i].forEach(function(element)
-      {
-          if(element.collider) {
-              gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
-          }
+    for (var i = 0; i < this.levelArray[this.index].tileMap.height; i++) {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function (element) {
+        if (element.collider) {
+          gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+        }
       });
     }
 
     this.player.init();
-	this.collisionManager.addCircleCollider(this.player.circle);
-    this.offSetY = 0;
+    this.collisionManager.addCircleCollider(this.player.circle);
+    this.collisionManager.addCircleCollider(this.levelArray[0].goal.collider);
 
-    this.actualCentre = 0;
-    this.actual0 = -1000;
-    this.enemies = [];
-    for (var i = 0; i < 1; i++) {
-        this.enemies.push(new Enemy(new Vector2(i * 100, 100), new Vector2(i * 100 + 100, 100), 3));
-        this.collisionManager.addCircleCollider(this.enemies[i].collider);
-    }
+    this.offSet = new Vector2(0, 0);
+    this.actualCentre = new Vector2(0, 0);
+    this.actual0 = new Vector2(0, -1000);
 
-    this.sawBlades = [];
-    for (var i = 0; i < 3; i++) {
-        this.sawBlades.push(new Sawblade(new Vector2(i * 200, 100), 50));
-        this.collisionManager.addCircleCollider(this.sawBlades[i].collider);
-    } 
-    
+    this.levelArray[0].enemies.forEach(enemy => {
+      this.collisionManager.addCircleCollider(enemy.collider);
+    });
+
+    this.levelArray[0].sawBlades.forEach(sawBlade => {
+      this.collisionManager.addCircleCollider(sawBlade.collider);
+    })
+
     this.wallOfDeath = new WallOfDeath(0, 1);
     this.collisionManager.addBoxCollider(this.wallOfDeath.collider);
+  }
+
+  nextLevel() {
+    for (var i = 0; i < this.levelArray[this.index].tileMap.height; i++) {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function (element) {
+        if (element.collider) {
+          gameNs.game.playScreen.collisionManager.removeBoxCollider(element.collider);
+        }
+      });
+
+      this.levelArray[this.index].enemies.forEach(element => {
+        gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+      });
+
+      this.levelArray[this.index].sawBlades.forEach(element => {
+        gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+      });
+
+      this.resetLevel();
+    }
+
+
+    this.index++;
+
+
+    for (var i = 0; i < this.levelArray[this.index].tileMap.height; i++) {
+      this.levelArray[this.index].tileMap.tileArray[i].forEach(function (element) {
+        if (element.collider) {
+          gameNs.game.playScreen.collisionManager.addBoxCollider(element.collider);
+        }
+      });
+    }
+    this.player.circle.shape.position.x = 200;
+    this.player.circle.shape.position.y = 500;
+    this.actual0.y = -200;
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
   update() {
@@ -62,47 +100,52 @@ class Play
 
     var circleCollisionResults = this.collisionManager.checkCircleColliderArray();
     for (var j = 0; j < circleCollisionResults.length; j++) {
-        if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
-            this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+      if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
+        if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
+          this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+        } else {
+          this.nextLevel();
         }
+      }
     }
 
     if (this.player.alive === false) {
-        this.resetLevel();
+      this.resetLevel();
     }
 
-    this.actualCentre = this.player.circle.shape.position.y + this.actual0 - 500;
+    this.actualCentre.y = this.player.circle.position.y + this.actual0.y - 500;
 
-    if (this.actualCentre < -10) {
-        this.offSetY = 3;
-    } else if (this.actualCentre > 10) {
-        this.offSetY = -3;
+    if (this.actualCentre.y < -10) {
+      this.offSet.y = 3;
+    } else if (this.actualCentre.y > 10) {
+      this.offSet.y = -3;
     } else {
-        this.offSetY = 0;
+      this.offSet.y = 0;
     }
 
-    this.actual0 += this.offSetY;
-    gameNs.game.relativeCanvas.y = -this.actual0;
+    this.actual0.y += this.offSet.y;
 
     this.player.update();
-    this.enemies.forEach(enemy => {
-        enemy.update();
-    });    
-    this.wallOfDeath.update();  
+    this.levelArray[this.index].enemies.forEach(enemy => {
+      enemy.update();
+    });
+    this.levelArray[this.index].sawBlades.forEach(blade => {
+      blade.update();
+    });
+    this.wallOfDeath.update();
   }
 
 
   render(ctx) {
-    
-    ctx.translate(-1, this.offSetY);
+    this.ctx = ctx;
+    ctx.translate(-1, this.offSet.y);
     gameNs.game.relativeCanvas.x++;
-    this.collisionManager.render(ctx);
-    //this.level1.render();
-    this.levelArray[0].render();
+    //this.collisionManager.render(ctx);
+    this.levelArray[this.index].render();
     ctx.restore();
   }
 
   resetLevel() {
-    this.wallOfDeath.collider.position.x = 0;    
+    this.wallOfDeath.collider.position.x = 0;
   }
 }
