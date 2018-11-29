@@ -3,7 +3,6 @@ var that = {};
 class Player
 {
   constructor() {
-
   }
 
   init() {
@@ -49,6 +48,12 @@ class Player
       this.jumpEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-1.5, 1), 10, 'rgb(0, 255, 255)');
       this.jumpEmitter.setMaxParticles(100);
       this.jumpEmitter.setEmissionRate(100);
+
+      this.moveEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-1.5, 1), 10, 'rgb(0, 255, 255');
+      this.moveEmitter.setMaxParticles(100);
+      this.moveEmitter.setEmissionRate(100);
+
+      
       //Create SoundManager Object
       this.sm = new SoundManager();
       this.initSound();
@@ -162,9 +167,11 @@ class Player
         this.jumpEmitter.addNewParticles();
         this.jumped = false;
       }
-
+      this.moveEmitter.setPos(this.circle.position.x, this.circle.position.y);
+      this.moveEmitter.addNewParticles();
       let canvas = document.getElementById("mycanvas");
       that.jumpEmitter.plotParticles(canvas.width, canvas.height);
+      this.moveEmitter.plotParticles(canvas.width, canvas.height);
 
       if (this.velocity.x < .005 && this.velocity.x > -.005) {
         this.velocity.x = 0;
@@ -178,9 +185,7 @@ class Player
           this.isGrounded = false;
           this.timer = 0;
         }
-
       }
-      //this.timer = 0;
       // update the object position with the current velocity
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
@@ -229,6 +234,7 @@ class Player
     let canvas = document.getElementById("mycanvas");
     let ctx = canvas.getContext("2d");
     this.jumpEmitter.draw(ctx);
+    this.moveEmitter.draw(ctx);
     this.sprite.draw();
   }
 
