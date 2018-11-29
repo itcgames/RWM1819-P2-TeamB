@@ -10,7 +10,11 @@ class Player
       that = this;
       this.collision = false;
 
+<<<<<<< Updated upstream
       this.circle = new CircleCollider(new Vector2(400,1700), 50);
+=======
+      this.circle = new CircleCollider(new Vector2(500,700), 50);
+>>>>>>> Stashed changes
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
