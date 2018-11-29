@@ -143,7 +143,7 @@ class Player
     this.pm.update();
   }
 
-  render() 
+  render()
   {
     //this.pm.render();
   }
