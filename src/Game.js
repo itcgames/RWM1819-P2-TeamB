@@ -8,14 +8,12 @@ class Game
         //  Initialise the canvas
         gameNs.game.canvas = document.createElement("canvas");
         gameNs.game.canvas.id = 'mycanvas';
-        gameNs.game.canvas.width = 5000;
+        gameNs.game.canvas.width = 5600;
         gameNs.game.canvas.height = 5000;
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
 
         this.input = new Input();
-
-        gameNs.game.tileMap = new TileMap(1, "../assets/levels/grassSheet.png");
 
         var div =  document.createElement('div');
         div.style.position = "relative";
@@ -27,8 +25,6 @@ class Game
         this.input = new Input();
 
         this.menuHandler = new MenuHandler();
-
-        this.tileMap.init();
 
         var s = new Scene("Menu", div, {'x': 0, 'y': 0, 'width': 100, 'height': 100});
         var s1 = new Scene("Play", div, {'x': 0, 'y': 0, 'width': 100, 'height': 100});
