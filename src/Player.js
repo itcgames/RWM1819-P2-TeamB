@@ -33,10 +33,15 @@ class Player
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
 
+      //Particle Emitter
+      this.jumpEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-1.5, 1), 10, 'rgb(0, 255, 255)');
+      this.jumpEmitter.setMaxParticles(100);
+      this.jumpEmitter.setEmissionRate(100);
       //Create SoundManager Object
       this.sm = new SoundManager();
       this.initSound();
       this.isGrounded = false;
+      this.jumped = false;
       this.timer = 0;
 
       this.previousV = new Vector2(0,0);
@@ -57,6 +62,7 @@ class Player
       if(element == "w") {
         that.acceleration.y -= 6;
         that.sm.playSound("jump", false);
+        that.jumped = true;
       }
 
       if(element == "f") {
@@ -129,7 +135,6 @@ class Player
       if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
         this.velocity.x += this.acceleration.x;
       }
-
       this.velocity.y += this.acceleration.y;
 
       this.velocity.x *= this.friction.x;
@@ -139,6 +144,15 @@ class Player
       if (this.velocity.y < .05 && this.velocity.y > -.05) {
         this.velocity.y = 0;
       }
+
+      if (this.jumped)
+      {
+        this.jumpEmitter.addNewParticles();
+        this.jumped = false;
+      }
+
+      let canvas = document.getElementById("mycanvas");
+      that.jumpEmitter.plotParticles(canvas.width, canvas.height);
 
       if (this.velocity.x < .005 && this.velocity.x > -.005) {
         this.velocity.x = 0;
@@ -195,6 +209,9 @@ class Player
   {
     //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
+    let canvas = document.getElementById("mycanvas");
+    let ctx = canvas.getContext("2d");
+    this.jumpEmitter.draw(ctx);
   }
 
   fire()
