@@ -9,10 +9,6 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
-<<<<<<< HEAD
-      this.circle = new CircleCollider(new Vector2(500,100), 50);
-    
-=======
       this.pos = new Vector2(400, 1700)
       this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
 
@@ -27,7 +23,6 @@ class Player
 
       this.sprite.setScale(0.66, 0.66);
 
->>>>>>> ed5215c507b71e3802da14bb0dd82b9d3ed84bde
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction

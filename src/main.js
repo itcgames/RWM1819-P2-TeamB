@@ -12,12 +12,8 @@ function main()
     //Sprite sheet for the marbles
     gameNs.game.assetManager.queueDownload("assets/sprites/marble.png");
     gameNs.game.assetManager.queueDownload("assets/levels/grassSheet.png");
-<<<<<<< HEAD
     gameNs.game.assetManager.queueDownload("assets/levelAssets/PNG Metal/slice03_03.png");
-    
-=======
     gameNs.game.assetManager.queueDownload("assets/sprites/endGoal.png");
->>>>>>> ed5215c507b71e3802da14bb0dd82b9d3ed84bde
     
 	gameNs.game.assetManager.downloadAll(function() 
 	{

@@ -1,115 +1,122 @@
 'use strict';
 
-class Interactable{
-    /*
-    *   Constructor for the interactable object
-    */
-    constructor(x, y, width, height, tag, axisLock,range){
-        
-        this.sprite; // TODO: add sprite entity
-        this.collider = new BoxCollider(new Vector2(x,y), width, height, [tag], ['saw']);
-        this.draggable = new Draggable(this);
-        this.draggable.setAxisLock(axisLock, range);
-        this.range = range;
+var that = {};
+/**
+ * draggable entity, currently represented as a square object
+ */
+class Draggable
+{
+  // taking in sizing parameters as well as a dropzone entity to check that it's placement is valid
+  constructor(entity)
+  {
+    that = this;
+    this.range = {};
+    this.entity = entity;  // reference to the entity
+    this.origin = {x: entity.getBoundingBox().x, y: entity.getBoundingBox().y};
+    this.ctx = {};
+    this.dragging = false;
+    this.axisLock = false;
+    this.axis = "";
 
-        this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/levelAssets/PNG Metal/slice03_03.png"),
-                                 width,
-                                 height,
-                                 0,
-                                 0,
-                                 x,
-                                 y,
-                                 gameNs.game.ctx);
+    this.inflight = {}; // used to get rid of object "jumping" to mouse co-ords
+    
+    document.addEventListener("mousedown",this.onMouseDown.bind(this), true);
+    this.mouseOverHandler = this.onMouseOver.bind(this);
+    document.addEventListener("mousemove", this.mouseOverHandler, true);
+  }
 
-        this.sprite.scaleX = width / 70;
-
-        this.lastPosition = {x: 0, y:0};
-
-        this.playerCollision = false;
-        this.audioManager; // TODO: add sound manager
+  setAxisLock(axis, range) // locks the entity to an axis
+  {
+    this.axisLock = true;
+    this.axis = axis;
+    if(range != undefined){
+    this.range = {minX: range.minX, minY: range.minY, maxX: range.maxX, maxY: range.maxY};
     }
+  }
 
-    /*
-    *   get the box collider of the entity - called in the draggable component
-    */
-    getCollider(){
-        if(this.collider != undefined){
-            return this.collider;
+  addCanvas(ctx){
+    this.ctx = ctx;
+  }
+
+  setOrigin(x, y){
+    this.origin.x = x;
+    this.origin.y = y;
+  }
+
+  onMouseOver(e)
+  {
+    if(!this.dragging){
+      if(utilities.pointBoxCollision(this.entity.getBoundingBox(), {x: e.pageX, y: e.pageY})){
+        //document.body.style.cursor = "none";
+        this.entity.hoverStart();
+      } else {
+        //document.body.style.cursor = "default";
+        this.entity.hoverEnd();
+      }
+    }
+  }
+
+  // detect a mouse button press event and check to see if it is within the points of the entity
+  onMouseDown(e)
+  {
+    e.preventDefault();
+
+    this.mouseMoveHandler = this.onMouseMove.bind(this);
+    this.mouseUpHandler = this.onMouseUp.bind(this);
+
+    if(utilities.pointBoxCollision(this.entity.getBoundingBox(), {x: e.pageX, y: e.pageY})){
+      this.dragging = true;
+      document.addEventListener("mousemove", this.mouseMoveHandler, true);
+      document.addEventListener("mouseup", this.mouseUpHandler, true);
+      
+      this.inflight.x = e.pageX - this.entity.getBoundingBox().x;
+      this.inflight.y = e.pageY - this.entity.getBoundingBox().y; 
+      
+      if(this.entity.soundManager != undefined) { 
+       this.entity.soundManager.playSound("pickup", false);
+      }
+    }
+  }
+  
+  // update the entity's location each mouse move
+  onMouseMove(e){
+    e.preventDefault();
+    if(this.axisLock){
+      var x = e.pageX - this.inflight.x;
+      var y = e.pageY - this.inflight.y;
+
+      if(this.range != undefined)
+      {
+        if(x < this.range.minX){
+          x = this.range.minX;
         }
-    }
-
-    getBoundingBox(){
-        if(this.collider != undefined){
-            return {x: this.collider.shape.position.x, y: this.collider.shape.position.y, 
-            width: this.collider.shape.width, height: this.collider.shape.height};}
-    }
-
-    /*
-    *   set the boolean to confirm that the player has collided with this object
-    */
-    collidingWithPlayer(colliding){
-        this.playerCollision = colliding;
-    }
-
-    /*
-    *   function to call an audio response from the manager - called in the draggable component
-    */
-    audioResponse(name)
-    {
-        if(this.audioManager != undefined){   
-            this.audioManager.playSound(name);}
-    }
-
-    updatePosition(x,y){
-        this.lastPosition.x = this.collider.position.x - x;
-        this.lastPosition.y = this.collider.position.y - y;
-        
-        if(this.lastPosition.y < 50)
-        { 
-            this.collider.position.y = y;
-            this.sprite.y = y;
+        if(y < this.range.minY){
+          y = this.range.minY;
         }
-        this.collider.position.x = x;
-        this.sprite.x = x;
-    }
-
-    /*
-    *   if the player is colliding with the interactable entity and the draggable entity is in
-    *   a drag state - update the player position based on the interactable entity
-    */
-    updatePlayerPos(player){
-        if(this.draggable.dragging){
-            if(this.draggable.axis == "horizontal"){
-                player.circle.position.x = player.circle.position.x - this.lastPosition.x;
-            } else {
-                if(this.lastPosition.y < 50){
-                    player.circle.position.y =  this.collider.position.y - player.circle.radius;
-                }
-            }
+        if(x > this.range.maxX){
+          x = this.range.maxX;
         }
-    }
+        if(y > this.range.maxY){
+          y = this.range.maxY;
+        }
+      }
 
-    /*
-    *   visual affordance for when the mouse hovers over the interactable - called in drggable component
-    */
-    hoverStart(){
-        this.colour = this.hoverOn;
+      if(this.axis === "horizontal"){
+        this.entity.updatePosition(x, this.entity.getBoundingBox().y);
+      } else if (this.axis === "vertical"){
+        this.entity.updatePosition(this.entity.getBoundingBox().x, y);
+      }
     }
+    else{
+      this.entity.updatePosition(e.pageX - this.inflight.x, e.pageY - this.inflight.y);
+    }
+  }
 
-    /*
-    *   when the mouse has stopped colliding with the interactable return it to it's default state
-    */
-    hoverEnd(){
-        // TODO: reset the visuals to default state
-        this.colour = this.hoverOff;
-    }
-
-    render(){
-        gameNs.game.ctx.beginPath();
-        gameNs.game.ctx.moveTo(this.range.minX + this.collider.width / 2 ,this.range.minY + this.collider.height / 2);
-        gameNs.game.ctx.lineTo(this.range.maxX + this.collider.width / 2,this.range.maxY + this.collider.height / 2);
-        gameNs.game.ctx.stroke();
-        gameNs.game.ctx.closePath();
-        this.sprite.draw();
-    }
+  // when the mouse button is released perform checks to ensure placement is valid and then remove the listeners
+  onMouseUp(e){
+    e.preventDefault();
+    this.dragging = false;
+    document.removeEventListener("mousemove",this.mouseMoveHandler, true);
+    document.removeEventListener("mouseup", this.mouseUpHandler, true);
+  }
 }

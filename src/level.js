@@ -23,6 +23,17 @@ class Level
                                      215,
                                      gameNs.game.ctx);
             }
+            if(levels[0]["level1"]["layers"][i]["name"] == "Interactable")
+            {
+                var x = levels[0]["level1"]["layers"][i]["objects"][0]["x"];
+                var y = levels[0]["level1"]["layers"][i]["objects"][0]["y"];
+                this.elevator = new Interactable(x, y,
+                                     levels[0]["level1"]["layers"][i]["objects"][0]["width"],
+                                     levels[0]["level1"]["layers"][i]["objects"][0]["height"],
+                                     'platform',
+                                     "vertical",
+                                     {minX: x, minY: y, maxX:x, maxY:y - 800});
+            }
         }
 
         this.goal.sprite.setScale(0.5, 0.5);
@@ -33,6 +44,7 @@ class Level
     {
         this.tileMap.render();
         this.goal.render();
+        this.elevator.render();
     }
 
 }
