@@ -7,7 +7,7 @@ class Interactable{
     constructor(x, y, width, height, tag, colour,range){
         
         this.sprite; // TODO: add sprite entity
-        this.collider = new BoxCollider(new Vector2(x,y), width, height, tag, "");
+        this.collider = new BoxCollider(new Vector2(x,y), width, height, "platform", "");
         this.draggable = new Draggable(this);
         this.draggable.setAxisLock("horizontal", range);
 
@@ -93,7 +93,7 @@ class Interactable{
         // testing the draw
         ctx.beginPath();
         ctx.fillStyle = this.colour;
-        var collider = this.getCollider();
+        var collider = this.getBoundingBox();
         ctx.fillRect(collider.x, collider.y, collider.width, collider.height);
         ctx.closePath();
     }
