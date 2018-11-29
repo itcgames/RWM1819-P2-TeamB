@@ -27,8 +27,7 @@ class Pause
 
   }
 
-
   render(ctx) {
-
+    
   }
 }

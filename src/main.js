@@ -1,7 +1,6 @@
 var gameNs = {}
 
-function main()
-{
+function main() {
     const game = new Game();
     var assetManager = new AssetManager();
     
