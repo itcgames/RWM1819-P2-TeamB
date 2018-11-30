@@ -9,6 +9,7 @@ class Player
       //  Initialise game objects here
       that = this;
       this.collision = false;
+      this.alive = true;
       this.pos = new Vector2(400, 1700)
       this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
 
@@ -23,9 +24,6 @@ class Player
 
       this.sprite.setScale(0.66, 0.66);
       this.alive = true;
-      this.spawnPoint = new Vector2(400, 1700);
-
-      this.circle = new CircleCollider(new Vector2(this.spawnPoint.x, this.spawnPoint.y), 50);
 
       this.gravity = new Vector2(0, .098);
       this.resitution = new Vector2(1.2, .098);
@@ -179,7 +177,6 @@ class Player
 
       if (!this.circle.colliding) {
         this.timer += 1 / 60;
-        console.log("Timer: " + this.timer);
         if (this.timer > 0.2)
         {
           this.isGrounded = false;
@@ -190,20 +187,15 @@ class Player
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
 
-      if (this.p.velocityX > 100)
-      {
+      if (this.p.velocityX > 100) {
         this.p.velocityX = 100;
-      }
-      else if (this.p.velocityX < -100)
-      {
+      } else if (this.p.velocityX < -100) {
         this.p.velocityX = -100;
       }
-      if (this.p.velocityY > 100)
-      {
+
+      if (this.p.velocityY > 100) {
         this.p.velocityY = 100;
-      }
-      else if (this.p.velocityY < -100)
-      {
+      } else if (this.p.velocityY < -100) {
         this.p.velocityY = -100;
       }
 
@@ -222,7 +214,9 @@ class Player
 
     this.sprite.setPosition(this.circle.position.x - 50,
                             this.circle.position.y - 50);
-    this.sprite.rotate(1);
+
+
+    this.sprite.rotate(this.velocity.x);
 
     this.pm.update();
   }
@@ -244,8 +238,8 @@ class Player
   }
 
   resetPlayer() {
-    this.circle.position.x = this.spawnPoint.x;
-    this.circle.position.y = this.spawnPoint.y;
+    this.circle.position.x = this.pos.x;
+    this.circle.position.y = this.pos.y;
     this.velocity.x = 0;
     this.velocity.y = 0;
     this.alive = true;

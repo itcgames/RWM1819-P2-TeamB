@@ -50,7 +50,7 @@ class Game
 
         this.input.addKeyHandler(gameNs.game.playScreen.player.playerKeys);
         this.input.addKeyHandler(gameNs.game.menu.menuKeys);
-        this.input.addKeyHandler(gameNs.game.pause.menuKeys);
+        this.input.addKeyHandler(gameNs.game.pause.pauseKeys);
 
 
         this.menuHandler.showOnlyCurrentScene();
@@ -93,17 +93,17 @@ class Game
 
 
     render() {
-        this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+
 
         //  Render game objects here.
 
         if(this.menuHandler._currentScene == "Play") {
+          this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
           gameNs.game.playScreen.render(gameNs.game.ctx);
         } else if(this.menuHandler._currentScene == "Menu") {
           this.menuHandler.render(gameNs.game.ctx);
           gameNs.game.menu.render(gameNs.game.ctx);
         } else {
-          gameNs.game.playScreen.render(gameNs.game.ctx);
           this.menuHandler.render(gameNs.game.ctx);
           gameNs.game.pause.render(gameNs.game.ctx);
         }
