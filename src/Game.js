@@ -62,12 +62,6 @@ class Game
         this.prevTime = 0;
         this.dt = 0;
 
-        //Listens for mouse movement event and updates position var
-        window.addEventListener("mousemove", function(e) {
-          gameNs.game.mX = e.clientX;
-          gameNs.game.mY = e.clientY;
-        })
-
         var title = document.createElement("h1");
         var myText = document.createTextNode("Press Enter to start the game");
         title.appendChild(myText);

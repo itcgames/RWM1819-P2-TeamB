@@ -27,31 +27,38 @@ class Player
       this.alive = true;
 
       this.gravity = new Vector2(0, .098);
-      this.resitution = new Vector2(1.2, .098);
+      this.resitution = new Vector2(1, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0);
       this.acceleration = new Vector2(0,0);
       this.previousV = new Vector2(0,0);
+
+
+        //Listens for mouse movement event and updates position var
+      window.addEventListener("mousemove", function(e) {
+        gameNs.game.mX = e.pageX + gameNs.game.relativeCanvas.x;
+        gameNs.game.mY = e.pageY + gameNs.game.relativeCanvas.y;
+      })
 
       //Projectile and Projectile Manager
       this.pm = new ProjectileManager();
       this.p = new Projectile("pOne");
       this.p.setPosition(500, 100);
       this.p.setAngle(45);
-      this.p.setSpeed(1.2);
+      this.p.setSpeed(0.15);
       this.pm.setGlobalGravity(2.1);
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
 
+      //Array of emitters
+      this.emitters = new Array();
       //Particle Emitter
-      this.jumpEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-1.5, 1), 10, 'rgb(0, 0, 0)');
-      this.jumpEmitter.setMaxParticles(100);
-      this.jumpEmitter.setEmissionRate(100);
 
-      this.moveEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-0.5, 0.5), 10, 'rgb(0, 0, 255');
+      this.moveEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-0.5, 0.5), 0.5, 'rgb(0, 0, 255');
+
       this.moveEmitter.setMaxParticles(1000);
       this.moveEmitter.setEmissionRate(1);
-      
+
       //Create SoundManager Object
       this.sm = new SoundManager();
       this.initSound();
@@ -67,22 +74,26 @@ class Player
   playerKeys(keys) {
     keys.forEach(function(element) {
       if(element == "a") {
-        that.acceleration.x -= 1;
+        that.acceleration.x -= 3;
       }
 
       if(element == "d") {
-        that.acceleration.x += 1;
+        that.acceleration.x += 3;
       }
 
+
       if(element == "w") {
-        that.acceleration.y -= 6;
-        that.sm.playSound("jump", false);
-        that.jumped = true;
+          if(that.isGrounded === true){
+            that.acceleration.y -= 10;
+            that.sm.playSound("jump", false);
+          }
       }
 
       if(element == "f") {
-        that.fire();
-        that.sm.playSound("proj", false);
+        if (that.p.IsFired() === false){
+          that.fire();
+          that.sm.playSound("proj", false);
+        }
       }
 
       if(element == "Escape") {
@@ -105,7 +116,6 @@ class Player
           if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
               this.circle.position.x = entity.position.x - this.circle.radius;
               this.velocity.x *= -this.resitution.x;
-              this.p.setFired(false);
             }
         }
 
@@ -114,7 +124,6 @@ class Player
           if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
               this.circle.position.x = entity.position.x + entity.width + this.circle.radius;
               this.velocity.x *= -this.resitution.x;
-              this.p.setFired(false);
             }
         }
 
@@ -122,20 +131,37 @@ class Player
         if (this.circle.position.y > entity.position.y + entity.height) {
           this.circle.position.y = entity.position.y + entity.height + this.circle.radius;
             this.velocity.y *= -this.resitution.y;
-            this.p.setFired(false);
         }
 
         // colliding with the top side of the entity
         if (this.circle.shape.position.y  < entity.shape.position.y) {
           this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
           this.velocity.y *= -this.resitution.y;
-          this.p.setFired(false);
           this.timer = 0;
+
           if (!this.isGrounded) {
             this.sm.playSound("land", false);
+            let canvas = document.getElementById("mycanvas");
+
+            this.emitters.push(new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-10, 10), 2.3, 'rgb(0, 0, 0)'));
+
+            for (let i = 0; i < this.emitters.length; i++)
+            {
+              this.emitters[i].setMaxParticles(100);
+              this.emitters[i].setEmissionRate(100);
+              this.emitters[i].plotParticles(canvas.width, canvas.height);
+
+              for (let j = 0; j < this.emitters[i].maxParticles; j++)
+              {
+                this.emitters[i].addNewParticles();
+              }
+            }
           }
           this.isGrounded = true;
+
         }
+
+        this.p.setFired(false);
       } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
         this.resetPlayer(x, y);
@@ -144,28 +170,34 @@ class Player
   }
 
   update() {
-    this.render();
-    this.acceleration.y += this.gravity.y;
-
+    if (this.alive) {
+      this.render();
+      this.acceleration.y += this.gravity.y;
       if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
         this.velocity.x += this.acceleration.x;
       }
       this.velocity.y += this.acceleration.y;
 
-    this.velocity.y += this.acceleration.y;
+      this.velocity.y += this.acceleration.y;
 
-    this.velocity.x *= this.friction.x;
-    this.velocity.y *= this.friction.y;
+      this.velocity.x *= this.friction.x;
+      this.velocity.y *= this.friction.y;
 
       if (this.jumped)
       {
         //this.jumpEmitter.addNewParticles();
         this.jumped = false;
       }
+
       this.moveEmitter.setPos(this.circle.position.x, this.circle.position.y);
       this.moveEmitter.addNewParticles();
       let canvas = document.getElementById("mycanvas");
-      //that.jumpEmitter.plotParticles(canvas.width, canvas.height);
+
+      //Plot all the particles in the array
+      for (let i = 0; i < this.emitters.length; i++)
+      {
+        this.emitters[i].plotParticles(canvas.width, canvas.height);
+      }
       this.moveEmitter.plotParticles(canvas.width, canvas.height);
 
       if (this.velocity.x < .005 && this.velocity.x > -.005) {
@@ -191,40 +223,43 @@ class Player
       }
 
 
-    //this.timer = 0;
-    // update the object position with the current velocity
-    this.circle.shape.position.x += this.velocity.x;
-    this.circle.shape.position.y += this.velocity.y;
+      if (this.p.IsFired()) {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
+        this.velocity = this.p.getVelocity();
+      } else {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
+      }
 
-    if (this.p.velocityX > 100) {
-      this.p.velocityX = 100;
-    } else if (this.p.velocityX < -100) {
-      this.p.velocityX = -100;
+      if (this.p.velocityX > 100) {
+        this.p.velocityX = 100;
+      } else if (this.p.velocityX < -100) {
+        this.p.velocityX = -100;
+      }
+
+      if (this.p.velocityY > 100) {
+        this.p.velocityY = 100;
+      } else if (this.p.velocityY < -100) {
+        this.p.velocityY = -100;
+      }
+
+      if (this.p.IsFired()) {
+        this.velocity = this.p.getVelocity();
+      } else {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
+      }
+
+      this.previousV = this.velocity;
+      this.acceleration = new Vector2(0,0);
+      this.pm.update();
+
+      this.sprite.setPosition(this.circle.position.x - 50,
+                              this.circle.position.y - 50);
+
+
+      this.sprite.rotate(this.velocity.x);
+
+      this.pm.update();
     }
-
-    if (this.p.velocityY > 100) {
-      this.p.velocityY = 100;
-    } else if (this.p.velocityY < -100) {
-      this.p.velocityY = -100;
-    }
-
-    if (this.p.IsFired()) {
-      this.velocity = this.p.getVelocity();
-    } else {
-      this.p.setPosition(this.circle.position.x, this.circle.position.y);
-    }
-
-    this.previousV = this.velocity;
-    this.acceleration = new Vector2(0,0);
-    this.pm.update();
-
-    this.sprite.setPosition(this.circle.position.x - 50,
-                            this.circle.position.y - 50);
-
-
-    this.sprite.rotate(this.velocity.x);
-
-    this.pm.update();
   }
 
 
@@ -235,8 +270,13 @@ class Player
     let canvas = document.getElementById("mycanvas");
     let ctx = canvas.getContext("2d");
 
-    this.jumpEmitter.draw(ctx);
     this.moveEmitter.draw(ctx);
+
+    for (let i = 0; i < this.emitters.length; i++)
+    {
+      this.emitters[i].draw(ctx);
+    }
+
     this.sprite.draw();
   }
 
