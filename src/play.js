@@ -160,12 +160,7 @@ class Play {
     this.ctx = ctx;
     this.actual0.x--;
     ctx.translate(-1, this.offSet.y);
-<<<<<<< HEAD
     this.backgroundSprite.draw();
-=======
-
->>>>>>> f26d414beca4e9aa5c046afa1d9a31a27d3161ea
-    //this.collisionManager.render(ctx);
     this.levelArray[this.index].render();
     ctx.restore();
   }
