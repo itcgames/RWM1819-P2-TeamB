@@ -113,8 +113,6 @@ class Play {
     this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
 
     this.actual0.y = this.levelArray[this.index].tileMap.actualY;
-    this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
-    this.actual0.x = 0;
     this.resetLevel();
     gameNs.game.deathTranslation.y = 0;
   }
