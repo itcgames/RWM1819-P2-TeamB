@@ -85,7 +85,7 @@ class Player
   * @arg entity - this is an entity that is passed only if it has collided with the object
   *               the entity contains a shape which has its own position vector and size values
   */
-  handleCollision(entity)
+  handleCollision(entity, x, y)
   {
     if(entity != undefined){
       if (entity.containsObjectTag('ground')) {
@@ -127,71 +127,68 @@ class Player
         }
       } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
+        this.resetPlayer(x, y);
       }
     }
   }
 
   update() {
-    if (this.alive) {
-      this.render();
-      this.acceleration.y += this.gravity.y;
+    this.render();
+    this.acceleration.y += this.gravity.y;
 
-      if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
-        this.velocity.x += this.acceleration.x;
-      }
-
-      this.velocity.y += this.acceleration.y;
-
-      this.velocity.x *= this.friction.x;
-      this.velocity.y *= this.friction.y;
-
-      // threshold for the velocity, come to rest after a while
-      if (this.velocity.y < .05 && this.velocity.y > -.05) {
-        this.velocity.y = 0;
-      }
-
-      if (this.velocity.x < .005 && this.velocity.x > -.005) {
-        this.velocity.x = 0;
-      }
-
-      if (!this.circle.colliding) {
-        this.timer += 1 / 60;
-        if (this.timer > 0.2)
-        {
-          this.isGrounded = false;
-          this.timer = 0;
-        }
-
-      }
-      //this.timer = 0;
-      // update the object position with the current velocity
-      this.circle.shape.position.x += this.velocity.x;
-      this.circle.shape.position.y += this.velocity.y;
-
-      if (this.p.velocityX > 100) {
-        this.p.velocityX = 100;
-      } else if (this.p.velocityX < -100) {
-        this.p.velocityX = -100;
-      }
-
-      if (this.p.velocityY > 100) {
-        this.p.velocityY = 100;
-      } else if (this.p.velocityY < -100) {
-        this.p.velocityY = -100;
-      }
-
-      if (this.p.IsFired()) {
-        this.velocity = this.p.getVelocity();
-      } else {
-        this.p.setPosition(this.circle.position.x, this.circle.position.y);
-      }
-
-      this.previousV = this.velocity;
-      this.acceleration = new Vector2(0,0);
-      this.pm.update();
-    } else {
-      this.resetPlayer();
+    if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
+      this.velocity.x += this.acceleration.x;
     }
+
+    this.velocity.y += this.acceleration.y;
+
+    this.velocity.x *= this.friction.x;
+    this.velocity.y *= this.friction.y;
+
+    // threshold for the velocity, come to rest after a while
+    if (this.velocity.y < .05 && this.velocity.y > -.05) {
+      this.velocity.y = 0;
+    }
+
+    if (this.velocity.x < .005 && this.velocity.x > -.005) {
+      this.velocity.x = 0;
+    }
+
+    if (!this.circle.colliding) {
+      this.timer += 1 / 60;
+      if (this.timer > 0.2)
+      {
+        this.isGrounded = false;
+        this.timer = 0;
+      }
+
+    }
+    //this.timer = 0;
+    // update the object position with the current velocity
+    this.circle.shape.position.x += this.velocity.x;
+    this.circle.shape.position.y += this.velocity.y;
+
+    if (this.p.velocityX > 100) {
+      this.p.velocityX = 100;
+    } else if (this.p.velocityX < -100) {
+      this.p.velocityX = -100;
+    }
+
+    if (this.p.velocityY > 100) {
+      this.p.velocityY = 100;
+    } else if (this.p.velocityY < -100) {
+      this.p.velocityY = -100;
+    }
+
+    if (this.p.IsFired()) {
+      this.velocity = this.p.getVelocity();
+    } else {
+      this.p.setPosition(this.circle.position.x, this.circle.position.y);
+    }
+
+    this.previousV = this.velocity;
+    this.acceleration = new Vector2(0,0);
+    this.pm.update();
 
     this.sprite.setPosition(this.circle.position.x - 50,
                             this.circle.position.y - 50);
@@ -214,9 +211,18 @@ class Player
     this.pm.fireProjectiles();
   }
 
-  resetPlayer() {
-    this.circle.position.x = this.pos.x;
-    this.circle.position.y = this.pos.y;
+  nextLevel(x,y) {
+    console.log("Bang");
+    this.circle.position.x = x;
+    this.circle.position.y = y;
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.p.setVelocity(0, 0);
+  }
+
+  resetPlayer(x, y) {
+    this.circle.position.x = x;
+    this.circle.position.y = y;
     this.velocity.x = 0;
     this.velocity.y = 0;
     this.alive = true;
