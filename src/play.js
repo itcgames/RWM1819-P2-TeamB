@@ -72,10 +72,12 @@ class Play {
       });
 
       this.resetLevel();
+
     }
-
-
     this.index++;
+
+    this.player.nextLevel(this.levelArray[this.index].tileMap.playerX,
+    this.levelArray[this.index].tileMap.playerY);
 
 
     for (var i = 0; i < this.levelArray[this.index].tileMap.height; i++) {
@@ -96,9 +98,6 @@ class Play {
 
     this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
 
-    this.player.circle.shape.position.x = 200;
-    this.player.circle.shape.position.y = 500;
-    this.actual0.y = -200;
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
@@ -115,11 +114,15 @@ class Play {
     for (var j = 0; j < circleCollisionResults.length; j++) {
       if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
         if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
-          this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - 1500));
+          this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
           this.actual0.x = 0;
           this.wallOfDeath.collider.position.x = 0;
-          this.actual0.y = -1000;
-          this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+          this.actual0.y = this.levelArray[this.index].tileMap.actualY;
+          this.player.handleCollision(
+            this.collisionManager.circleColliderArray[j],
+            this.levelArray[this.index].tileMap.playerX,
+            this.levelArray[this.index].tileMap.playerY
+          );
         } else {
           this.nextLevel();
         }
