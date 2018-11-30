@@ -20,11 +20,12 @@ class Play {
     this.levelArray = [];
     this.levelArray.push(new Level("level1"));
     this.levelArray.push(new Level("level2"));
+
     this.levelArray.push(new Level("level3"));
-    this.levelArray.push(new Level("level4"));
     this.index = 0;
     this.ctx;
 
+    this.scrollX = -1;
     this.player = new Player();
     for (var i = 0; i < this.levelArray[this.index].tileMap.height; i++) {
       this.levelArray[this.index].tileMap.tileArray[i].forEach(function (element) {
@@ -77,6 +78,10 @@ class Play {
     }
     this.index++;
 
+    if(this.index == 2) {
+      this.scrollX = 0;
+    }
+
     this.player.nextLevel(this.levelArray[this.index].tileMap.playerX,
     this.levelArray[this.index].tileMap.playerY);
 
@@ -99,7 +104,9 @@ class Play {
 
     this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
 
-    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+    this.actual0.y = this.levelArray[this.index].tileMap.actualY;
+    this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
+    this.actual0.x = 0;
   }
 
   update() {
@@ -118,7 +125,8 @@ class Play {
           this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
           this.actual0.x = 0;
           this.wallOfDeath.collider.position.x = 0;
-          this.actual0.y = this.levelArray[this.index].tileMap.actualY;
+
+
           this.player.handleCollision(
             this.collisionManager.circleColliderArray[j],
             this.levelArray[this.index].tileMap.playerX,
@@ -154,6 +162,7 @@ class Play {
     this.levelArray[this.index].sawBlades.forEach(blade => {
       blade.update();
     });
+    if(this.scrollX < 0)
     this.wallOfDeath.update();
   }
 
@@ -161,7 +170,7 @@ class Play {
   render(ctx) {
     this.ctx = ctx;
     this.actual0.x--;
-    ctx.translate(-1, this.offSet.y);
+    ctx.translate(this.scrollX, this.offSet.y);
     gameNs.game.relativeCanvas.x++;
     //this.collisionManager.render(ctx);
     this.backgroundSprite.draw();

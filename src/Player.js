@@ -32,7 +32,7 @@ class Player
       this.acceleration = new Vector2(0,0);
       this.previousV = new Vector2(0,0);
 
-      
+
         //Listens for mouse movement event and updates position var
       window.addEventListener("mousemove", function(e) {
         gameNs.game.mX = e.pageX + gameNs.game.relativeCanvas.x;
@@ -80,19 +80,19 @@ class Player
         that.acceleration.x += 3;
       }
 
-      
+
       if(element == "w") {
-        if (that.isGrounded === true){
+
           that.acceleration.y -= 10;
           that.sm.playSound("jump", false);
-        }        
+
       }
-      
+
       if(element == "f") {
         if (that.p.IsFired() === false){
           that.fire();
           that.sm.playSound("proj", false);
-        }        
+        }
       }
 
       if(element == "Escape") {
@@ -135,7 +135,7 @@ class Player
         // colliding with the top side of the entity
         if (this.circle.shape.position.y  < entity.shape.position.y) {
           this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
-          this.velocity.y *= -this.resitution.y;          
+          this.velocity.y *= -this.resitution.y;
           this.timer = 0;
 
           if (!this.isGrounded) {
@@ -157,7 +157,7 @@ class Player
             }
           }
           this.isGrounded = true;
-          
+
         }
 
         this.p.setFired(false);
@@ -198,7 +198,7 @@ class Player
         this.emitters[i].plotParticles(canvas.width, canvas.height);
       }
       this.moveEmitter.plotParticles(canvas.width, canvas.height);
-      
+
       if (this.velocity.x < .005 && this.velocity.x > -.005) {
         this.velocity.x = 0;
       }
