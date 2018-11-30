@@ -6,9 +6,6 @@ class Play {
   init() {
 
 	this.collisionManager = new CollisionManager();
-    this.platforms = [];
-    this.levelArray = [];
-	this.levelArray.push(new Level("level2"));
 
     this.levelArray = [];
     this.levelArray.push(new Level("level1"));
@@ -39,6 +36,10 @@ class Play {
       this.collisionManager.addCircleCollider(enemy.collider);
     });
 
+    this.levelArray[0].platforms.forEach(platform => {
+      this.collisionManager.addBoxCollider(platform.collider);
+    });
+
     this.levelArray[0].sawBlades.forEach(sawBlade => {
       this.collisionManager.addCircleCollider(sawBlade.collider);
     })
@@ -57,6 +58,10 @@ class Play {
 
       this.levelArray[this.index].enemies.forEach(element => {
         gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+      });
+
+      this.levelArray[this.index].platforms.forEach(platform => {
+        gameNs.game.playScreen.collisionManager.removeBoxCollider(platform.collider);
       });
 
       this.levelArray[this.index].sawBlades.forEach(element => {
@@ -91,7 +96,7 @@ class Play {
             this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
             if(this.collisionManager.boxColliderArray[i].containsObjectTag('platform')){
                 var that = this;
-                this.platforms.forEach(function(element){
+                this.levelArray[this.index].platforms.forEach(function(element){
                     element.updatePlayerPos(that.player);
                 })
             }	
@@ -124,6 +129,7 @@ class Play {
     }
 
     this.actual0.y += this.offSet.y;
+    gameNs.game.relativeCanvas.y = -this.actual0.y;
 
     this.player.update();
     this.levelArray[this.index].enemies.forEach(enemy => {

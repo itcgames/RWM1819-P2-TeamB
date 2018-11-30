@@ -27,9 +27,9 @@ class Level {
     }
 
     this.platforms = [];
-    if(levels[level]["layers"]["Interactables"] !== undefined){
-      levels[level]["layers"]["AIMarkers"]["objects"].forEach(element => {
-        this.platforms.push(new Interactable(element["x"], element["y"],element["width"], element["height"], 'platform', element["name"], {minX: x, minY: y - 800, maxX:x, maxY:y}))
+    if(levels[level]["layers"]["Interactable"] !== undefined){
+      levels[level]["layers"]["Interactable"]["objects"].forEach(element => {
+        this.platforms.push(new Interactable(element["x"], element["y"],element["width"], element["height"], 'platform', element["type"], {minX: element["x"], minY: element["maxY"], maxX:element["x"], maxY:element["y"]}))
       });
     }
 

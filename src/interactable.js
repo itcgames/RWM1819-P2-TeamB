@@ -8,8 +8,6 @@ class Interactable{
         
         this.sprite; // TODO: add sprite entity
         this.collider = new BoxCollider(new Vector2(x,y), width, height, [tag], ['saw']);
-        gameNs.game.playScreen.collisionManager.addBoxCollider(this.collider);
-        gameNs.game.playScreen.platforms.push(this);
         this.draggable = new Draggable(this);
         this.draggable.setAxisLock(axisLock, range);
         this.range = range;
