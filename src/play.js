@@ -115,6 +115,10 @@ class Play {
     for (var j = 0; j < circleCollisionResults.length; j++) {
       if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
         if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
+          this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - 1500));
+          this.actual0.x = 0;
+          this.wallOfDeath.collider.position.x = 0;
+          this.actual0.y = -1000;
           this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
         } else {
           this.nextLevel();
@@ -151,8 +155,13 @@ class Play {
 
   render(ctx) {
     this.ctx = ctx;
+    this.actual0.x--;
     ctx.translate(-1, this.offSet.y);
+<<<<<<< HEAD
     this.backgroundSprite.draw();
+=======
+
+>>>>>>> f26d414beca4e9aa5c046afa1d9a31a27d3161ea
     //this.collisionManager.render(ctx);
     this.levelArray[this.index].render();
     ctx.restore();
