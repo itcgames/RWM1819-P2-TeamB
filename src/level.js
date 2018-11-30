@@ -29,7 +29,7 @@ class Level {
     this.platforms = [];
     if(levels[level]["layers"]["Interactable"] !== undefined){
       levels[level]["layers"]["Interactable"]["objects"].forEach(element => {
-        this.platforms.push(new Interactable(element["x"], element["y"],element["width"], element["height"], 'platform', element["type"], {minX: element["x"], minY: element["maxY"], maxX:element["x"], maxY:element["y"]}))
+        this.platforms.push(new Interactable(element["x"], element["y"],element["width"], element["height"], 'platform', element["type"], {minX: element["minX"], minY: element["minY"], maxX:element["maxX"], maxY:element["maxY"]}))
       });
     }
 

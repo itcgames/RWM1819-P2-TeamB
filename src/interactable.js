@@ -6,7 +6,7 @@ class Interactable{
     */
     constructor(x, y, width, height, tag, axisLock,range){
         
-        this.sprite; // TODO: add sprite entity
+        this.sprite;
         this.collider = new BoxCollider(new Vector2(x,y), width, height, [tag], ['saw']);
         this.draggable = new Draggable(this);
         this.draggable.setAxisLock(axisLock, range);

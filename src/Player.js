@@ -213,7 +213,6 @@ class Player
   }
 
   nextLevel(x,y) {
-    console.log("Bang");
     this.circle.position.x = x;
     this.circle.position.y = y;
     this.velocity.x = 0;

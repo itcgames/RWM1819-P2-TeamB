@@ -3,7 +3,7 @@ var levels = {
   "level1": {
     "height": 30,
     "infinite": false,
-    "playerX": 400,
+    "playerX": 600,
     "playerY": 1700,
     "yOffset": 1500,
     "actualY": -1000,
@@ -32,8 +32,10 @@ var levels = {
           "width": 138,
           "x": 1960.66666666667,
           "y": 1540.33333333333,
+          "minX":1960.66666666667,          
+          "minY":740.33333333333,
           "maxX": 1960.66666666667,
-          "maxY": 740.33333333333
+          "maxY": 1540.33333333333
         }],
         "opacity": 1,
         "type": "objectgroup",
@@ -210,7 +212,7 @@ var levels = {
   "level2": {
     "height": 20,
     "infinite": false,
-    "playerX": 150,
+    "playerX": 350,
     "playerY": 1000,
     "yOffset": 1500,
     "actualY": -1000,
@@ -276,11 +278,15 @@ var levels = {
                 "id":3,
                 "name":"",
                 "rotation":0,
-                "type":"",
+                "type":"horizontal",
                 "visible":true,
                 "width":138.727272727273,
                 "x":1470.54545454545,
-                "y":280.545454545455
+                "y":280.545454545455,
+                "minX":1470.54545454545,
+                "minY":280.545454545455,
+                "maxX": 2470.54545454545,
+                "maxY": 280.545454545455
                }],
         "opacity":1,
         "type":"objectgroup",
