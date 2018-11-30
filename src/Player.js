@@ -33,6 +33,13 @@ class Player
       this.acceleration = new Vector2(0,0);
       this.previousV = new Vector2(0,0);
 
+      
+        //Listens for mouse movement event and updates position var
+      window.addEventListener("mousemove", function(e) {
+        gameNs.game.mX = e.pageX + gameNs.game.relativeCanvas.x;
+        gameNs.game.mY = e.pageY + gameNs.game.relativeCanvas.y;
+      })
+
       //Projectile and Projectile Manager
       this.pm = new ProjectileManager();
       this.p = new Projectile("pOne");
@@ -57,17 +64,19 @@ class Player
   playerKeys(keys) {
     keys.forEach(function(element) {
       if(element == "a") {
-        that.acceleration.x -= 1;
+        that.acceleration.x -= 3;
       }
 
       if(element == "d") {
-        that.acceleration.x += 1;
+        that.acceleration.x += 3;
       }
 
+      
       if(element == "w") {
         that.acceleration.y -= 6;
         that.sm.playSound("jump", false);
       }
+      
 
       if(element == "f") {
         that.fire();
@@ -135,7 +144,6 @@ class Player
     if (this.alive) {
       this.render();
       this.acceleration.y += this.gravity.y;
-
       if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
         this.velocity.x += this.acceleration.x;
       }
@@ -181,6 +189,7 @@ class Player
       }
 
       if (this.p.IsFired()) {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
         this.velocity = this.p.getVelocity();
       } else {
         this.p.setPosition(this.circle.position.x, this.circle.position.y);

@@ -61,6 +61,7 @@ class Play {
         gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
       });
 
+
       this.resetLevel();
     }
 
@@ -120,6 +121,7 @@ class Play {
     }
 
     this.actual0.y += this.offSet.y;
+    gameNs.game.relativeCanvas.y = -this.actual0.y;
 
     this.player.update();
     this.levelArray[this.index].enemies.forEach(enemy => {
@@ -136,13 +138,14 @@ class Play {
     this.ctx = ctx;
     this.actual0.x--;
     ctx.translate(-1, this.offSet.y);
-
+    gameNs.game.relativeCanvas.x++;
     //this.collisionManager.render(ctx);
     this.levelArray[this.index].render();
     ctx.restore();
   }
 
   resetLevel() {
+    gameNs.game.relativeCanvas.x = 0;
     this.wallOfDeath.collider.position.x = 0;
   }
 }
