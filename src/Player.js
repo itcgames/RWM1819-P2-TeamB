@@ -3,7 +3,6 @@ var that = {};
 class Player
 {
   constructor() {
-
   }
 
   init() {
@@ -27,7 +26,7 @@ class Player
       this.alive = true;
 
       this.gravity = new Vector2(0, .098);
-      this.resitution = new Vector2(1.2, .098);
+      this.resitution = new Vector2(1, .098);
       this.friction = new Vector2(.97, .97); // x represents ground friction and y air friction
       this.velocity = new Vector2(0,0);
       this.acceleration = new Vector2(0,0);
@@ -50,10 +49,20 @@ class Player
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
 
+      //Particle Emitter
+      this.jumpEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-1.5, 1), 10, 'rgb(0, 0, 0)');
+      this.jumpEmitter.setMaxParticles(100);
+      this.jumpEmitter.setEmissionRate(100);
+
+      this.moveEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-0.5, 0.5), 10, 'rgb(0, 0, 255');
+      this.moveEmitter.setMaxParticles(1000);
+      this.moveEmitter.setEmissionRate(1);
+      
       //Create SoundManager Object
       this.sm = new SoundManager();
       this.initSound();
       this.isGrounded = false;
+      this.jumped = false;
       this.timer = 0;
 
       this.previousV = new Vector2(0,0);
@@ -97,7 +106,7 @@ class Player
   * @arg entity - this is an entity that is passed only if it has collided with the object
   *               the entity contains a shape which has its own position vector and size values
   */
-  handleCollision(entity)
+  handleCollision(entity, x, y)
   {
     if(entity != undefined){
       if (entity.containsObjectTag('ground')) {
@@ -137,6 +146,7 @@ class Player
         this.p.setFired(false);
       } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
+        this.resetPlayer(x, y);
       }
     }
   }
@@ -148,16 +158,23 @@ class Player
       if (this.velocity.x < this.MAX_SPEED_X && this.velocity.x > -this.MAX_SPEED_X) {
         this.velocity.x += this.acceleration.x;
       }
+      this.velocity.y += this.acceleration.y;
 
       this.velocity.y += this.acceleration.y;
 
       this.velocity.x *= this.friction.x;
       this.velocity.y *= this.friction.y;
 
-      // threshold for the velocity, come to rest after a while
-      if (this.velocity.y < .05 && this.velocity.y > -.05) {
-        this.velocity.y = 0;
+      if (this.jumped)
+      {
+        //this.jumpEmitter.addNewParticles();
+        this.jumped = false;
       }
+      this.moveEmitter.setPos(this.circle.position.x, this.circle.position.y);
+      this.moveEmitter.addNewParticles();
+      let canvas = document.getElementById("mycanvas");
+      //that.jumpEmitter.plotParticles(canvas.width, canvas.height);
+      this.moveEmitter.plotParticles(canvas.width, canvas.height);
 
       if (this.velocity.x < .005 && this.velocity.x > -.005) {
         this.velocity.x = 0;
@@ -170,12 +187,24 @@ class Player
           this.isGrounded = false;
           this.timer = 0;
         }
-
       }
-      //this.timer = 0;
       // update the object position with the current velocity
       this.circle.shape.position.x += this.velocity.x;
       this.circle.shape.position.y += this.velocity.y;
+
+      if (this.p.velocityX > 100) {
+        this.p.velocityX = 100;
+      } else if (this.p.velocityX < -100) {
+        this.p.velocityX = -100;
+      }
+
+
+      if (this.p.IsFired()) {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
+        this.velocity = this.p.getVelocity();
+      } else {
+        this.p.setPosition(this.circle.position.x, this.circle.position.y);
+      }
 
       if (this.p.velocityX > 100) {
         this.p.velocityX = 100;
@@ -190,7 +219,6 @@ class Player
       }
 
       if (this.p.IsFired()) {
-        this.p.setPosition(this.circle.position.x, this.circle.position.y);
         this.velocity = this.p.getVelocity();
       } else {
         this.p.setPosition(this.circle.position.x, this.circle.position.y);
@@ -199,23 +227,27 @@ class Player
       this.previousV = this.velocity;
       this.acceleration = new Vector2(0,0);
       this.pm.update();
-    } else {
-      this.resetPlayer();
+
+      this.sprite.setPosition(this.circle.position.x - 50,
+                              this.circle.position.y - 50);
+
+
+      this.sprite.rotate(this.velocity.x);
+
+      this.pm.update();
     }
-
-    this.sprite.setPosition(this.circle.position.x - 50,
-                            this.circle.position.y - 50);
-
-
-    this.sprite.rotate(this.velocity.x);
-
-    this.pm.update();
   }
+
 
   render()
   {
     //Render call to draw projectiles, disabled except for debugging
     //this.pm.render();
+    let canvas = document.getElementById("mycanvas");
+    let ctx = canvas.getContext("2d");
+
+    this.jumpEmitter.draw(ctx);
+    this.moveEmitter.draw(ctx);
     this.sprite.draw();
   }
 
@@ -224,9 +256,18 @@ class Player
     this.pm.fireProjectiles();
   }
 
-  resetPlayer() {
-    this.circle.position.x = this.pos.x;
-    this.circle.position.y = this.pos.y;
+  nextLevel(x,y) {
+    console.log("Bang");
+    this.circle.position.x = x;
+    this.circle.position.y = y;
+    this.velocity.x = 0;
+    this.velocity.y = 0;
+    this.p.setVelocity(0, 0);
+  }
+
+  resetPlayer(x, y) {
+    this.circle.position.x = x;
+    this.circle.position.y = y;
     this.velocity.x = 0;
     this.velocity.y = 0;
     this.alive = true;
