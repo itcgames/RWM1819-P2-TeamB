@@ -5,7 +5,7 @@ class Play {
 
   init() {
 
-    this.collisionManager = new CollisionManager();
+	this.collisionManager = new CollisionManager();
 
     this.backgroundSprite = new Sprite( gameNs.game.assetManager.getAsset("assets/sprites/background.png"),
                                         1920,
@@ -35,7 +35,6 @@ class Play {
       });
     }
 
-    this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
     this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
@@ -46,6 +45,10 @@ class Play {
 
     this.levelArray[this.index].enemies.forEach(enemy => {
       this.collisionManager.addCircleCollider(enemy.collider);
+    });
+
+    this.levelArray[this.index].platforms.forEach(platform => {
+      this.collisionManager.addBoxCollider(platform.collider);
     });
 
     this.levelArray[this.index].sawBlades.forEach(sawBlade => {
@@ -64,18 +67,21 @@ class Play {
         }
       });
 
-      this.levelArray[this.index].enemies.forEach(element => {
-        gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
-      });
+    this.levelArray[this.index].enemies.forEach(element => {
+      gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+    });
 
-      this.levelArray[this.index].sawBlades.forEach(element => {
-        gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
-      });
+    this.levelArray[this.index].platforms.forEach(platform => {
+      gameNs.game.playScreen.collisionManager.removeBoxCollider(platform.collider);
+    });
 
+    this.levelArray[this.index].sawBlades.forEach(element => {
+      gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+    });
 
-      this.resetLevel();
-
-    }
+    this.resetLevel();
+    
+  } 
     this.index++;
 
     if(this.index == 2) {
@@ -102,6 +108,10 @@ class Play {
       this.collisionManager.addCircleCollider(sawBlade.collider);
     })
 
+    this.levelArray[this.index].platforms.forEach(platform => {
+      this.collisionManager.addBoxCollider(platform.collider);
+    });
+
     this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
 
     this.actual0.y = this.levelArray[this.index].tileMap.actualY;
@@ -113,9 +123,15 @@ class Play {
     //  Update game objects here.
     this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
     for (var i = 0; i < this.collisionResults['BoxResults'].length; i++) {
-      if (this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true) {
-        this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
-      }
+        if (this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
+            this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
+            if(this.collisionManager.boxColliderArray[i].containsObjectTag('platform')){
+                var that = this;
+                this.levelArray[this.index].platforms.forEach(function(element){
+                    element.updatePlayerPos(that.player);
+                })
+            }	
+        }
     }
 
     var circleCollisionResults = this.collisionManager.checkCircleColliderArray();
@@ -124,6 +140,7 @@ class Play {
         if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
           this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
           this.actual0.x = 0;
+          this.actual0.y = this.levelArray[this.index].tileMap.actualY;
           this.wallOfDeath.collider.position.x = 0;
 
 
@@ -172,8 +189,8 @@ class Play {
     this.actual0.x--;
     ctx.translate(this.scrollX, this.offSet.y);
     gameNs.game.relativeCanvas.x++;
-    //this.collisionManager.render(ctx);
     this.backgroundSprite.draw();
+    //this.collisionManager.render(ctx);
     this.levelArray[this.index].render();
     ctx.restore();
   }

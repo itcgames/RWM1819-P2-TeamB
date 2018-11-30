@@ -12,6 +12,7 @@ class Player
       this.alive = true;
       this.pos = new Vector2(400, 1700)
       this.circle = new CircleCollider(new Vector2(this.pos.x, this.pos.y), 50);
+      this.alive = true;
 
       this.sprite = new Sprite(gameNs.game.assetManager.getAsset("assets/sprites/marble.png"),
                                                                 152,
@@ -82,10 +83,10 @@ class Player
 
 
       if(element == "w") {
-
-          that.acceleration.y -= 10;
-          that.sm.playSound("jump", false);
-
+          if(that.isGrounded === true){
+            that.acceleration.y -= 10;
+            that.sm.playSound("jump", false);
+          }
       }
 
       if(element == "f") {
@@ -109,7 +110,7 @@ class Player
   handleCollision(entity, x, y)
   {
     if(entity != undefined){
-      if (entity.containsObjectTag('ground')) {
+      if (entity.containsObjectTag('ground') || entity.containsObjectTag('platform')) {
         // colliding with the right side of the entity
         if (this.circle.position.x < entity.position.x) {
           if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
@@ -285,7 +286,6 @@ class Player
   }
 
   nextLevel(x,y) {
-    console.log("Bang");
     this.circle.position.x = x;
     this.circle.position.y = y;
     this.velocity.x = 0;
