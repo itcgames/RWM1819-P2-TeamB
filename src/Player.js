@@ -45,7 +45,7 @@ class Player
       this.p = new Projectile("pOne");
       this.p.setPosition(500, 100);
       this.p.setAngle(45);
-      this.p.setSpeed(1.2);
+      this.p.setSpeed(0.15);
       this.pm.setGlobalGravity(2.1);
       this.pm.setGlobalFriction(0.02);
       this.pm.addProjectile(this.p);
@@ -73,14 +73,17 @@ class Player
 
       
       if(element == "w") {
-        that.acceleration.y -= 6;
-        that.sm.playSound("jump", false);
+        if (that.isGrounded === true){
+          that.acceleration.y -= 10;
+          that.sm.playSound("jump", false);
+        }        
       }
       
-
       if(element == "f") {
-        that.fire();
-        that.sm.playSound("proj", false);
+        if (that.p.IsFired() === false){
+          that.fire();
+          that.sm.playSound("proj", false);
+        }        
       }
 
       if(element == "Escape") {
@@ -103,7 +106,6 @@ class Player
           if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
               this.circle.position.x = entity.position.x - this.circle.radius;
               this.velocity.x *= -this.resitution.x;
-              this.p.setFired(false);
             }
         }
 
@@ -112,7 +114,6 @@ class Player
           if (this.circle.position.y - this.circle.radius < entity.position.y + entity.height && this.circle.position.y + this.circle.radius > entity.position.y + this.circle.radius / 4) {
               this.circle.position.x = entity.position.x + entity.width + this.circle.radius;
               this.velocity.x *= -this.resitution.x;
-              this.p.setFired(false);
             }
         }
 
@@ -120,20 +121,20 @@ class Player
         if (this.circle.position.y > entity.position.y + entity.height) {
           this.circle.position.y = entity.position.y + entity.height + this.circle.radius;
             this.velocity.y *= -this.resitution.y;
-            this.p.setFired(false);
         }
 
         // colliding with the top side of the entity
         if (this.circle.shape.position.y  < entity.shape.position.y) {
           this.circle.shape.position.y = entity.shape.position.y - this.circle.shape.radius;
-          this.velocity.y *= -this.resitution.y;
-          this.p.setFired(false);
+          this.velocity.y *= -this.resitution.y;          
           this.timer = 0;
           if (!this.isGrounded) {
             this.sm.playSound("land", false);
           }
           this.isGrounded = true;
         }
+
+        this.p.setFired(false);
       } else if (entity.containsObjectTag('obstacle')) {
         this.alive = false;
       }
