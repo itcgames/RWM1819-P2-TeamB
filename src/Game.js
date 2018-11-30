@@ -11,6 +11,7 @@ class Game
         gameNs.game.canvas.width = 5600;
         gameNs.game.canvas.height = 5000;
         gameNs.game.relativeCanvas = {x:0,y:0};
+        gameNs.game.deathTranslation = {x:0, y:0};
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
 

@@ -300,6 +300,7 @@ class Player
     this.velocity.y = 0;
     this.alive = true;
     this.p.setVelocity(0, 0);
+    gameNs.game.playScreen.resetLevel();
   }
 
   initSound() {

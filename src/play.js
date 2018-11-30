@@ -66,22 +66,21 @@ class Play {
           gameNs.game.playScreen.collisionManager.removeBoxCollider(element.collider);
         }
       });
-
-    this.levelArray[this.index].enemies.forEach(element => {
-      gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
-    });
-
-    this.levelArray[this.index].platforms.forEach(platform => {
-      gameNs.game.playScreen.collisionManager.removeBoxCollider(platform.collider);
-    });
-
-    this.levelArray[this.index].sawBlades.forEach(element => {
-      gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
-    });
-
-    this.resetLevel();
-    
   } 
+
+  this.levelArray[this.index].enemies.forEach(element => {
+    gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+  });
+
+  this.levelArray[this.index].platforms.forEach(platform => {
+    gameNs.game.playScreen.collisionManager.removeBoxCollider(platform.collider);
+  });
+
+  this.levelArray[this.index].sawBlades.forEach(element => {
+    gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
+  });
+
+  this.resetLevel();
     this.index++;
 
     if(this.index == 2) {
@@ -124,7 +123,9 @@ class Play {
     this.collisionResults = this.collisionManager.checkCircleAndBoxColliderArray();
     for (var i = 0; i < this.collisionResults['BoxResults'].length; i++) {
         if (this.collisionResults['BoxResults'][i][CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)] == true){
-            this.player.handleCollision(this.collisionManager.boxColliderArray[i]);
+            this.player.handleCollision(this.collisionManager.boxColliderArray[i], 
+              this.levelArray[this.index].tileMap.playerX,
+              this.levelArray[this.index].tileMap.playerY);
             if(this.collisionManager.boxColliderArray[i].containsObjectTag('platform')){
                 var that = this;
                 this.levelArray[this.index].platforms.forEach(function(element){
@@ -138,12 +139,6 @@ class Play {
     for (var j = 0; j < circleCollisionResults.length; j++) {
       if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
         if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
-          this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
-          this.actual0.x = 0;
-          this.actual0.y = this.levelArray[this.index].tileMap.actualY;
-          this.wallOfDeath.collider.position.x = 0;
-
-
           this.player.handleCollision(
             this.collisionManager.circleColliderArray[j],
             this.levelArray[this.index].tileMap.playerX,
@@ -170,7 +165,7 @@ class Play {
     }
 
     this.actual0.y += this.offSet.y;
-    gameNs.game.relativeCanvas.y = -this.actual0.y;
+    gameNs.game.relativeCanvas.y = (-this.actual0.y - gameNs.game.deathTranslation.y);
 
     this.player.update();
     this.levelArray[this.index].enemies.forEach(enemy => {
@@ -196,7 +191,11 @@ class Play {
   }
 
   resetLevel() {
-    gameNs.game.relativeCanvas.x = 0;
+    this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
+    this.actual0.x = 0;
+    this.actual0.y = this.levelArray[this.index].tileMap.actualY;
     this.wallOfDeath.collider.position.x = 0;
+    gameNs.game.relativeCanvas.x = 0;
+    gameNs.game.deathTranslation.y = this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset - this.actual0.y - gameNs.game.relativeCanvas.y;
   }
 }
