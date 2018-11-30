@@ -10,6 +10,7 @@ class Game
         gameNs.game.canvas.id = 'mycanvas';
         gameNs.game.canvas.width = 5600;
         gameNs.game.canvas.height = 5000;
+        gameNs.game.relativeCanvas = {x:0,y:0};
         gameNs.game.ctx = gameNs.game.canvas.getContext("2d");
         document.body.appendChild(gameNs.game.canvas);
 
@@ -60,12 +61,6 @@ class Game
         this.mY = 0;
         this.prevTime = 0;
         this.dt = 0;
-
-        //Listens for mouse movement event and updates position var
-        window.addEventListener("mousemove", function(e) {
-          gameNs.game.mX = e.clientX;
-          gameNs.game.mY = e.clientY;
-        })
 
         var title = document.createElement("h1");
         var myText = document.createTextNode("Press Enter to start the game");
