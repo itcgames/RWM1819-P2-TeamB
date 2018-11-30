@@ -80,7 +80,6 @@ class Play {
     gameNs.game.playScreen.collisionManager.removeCircleCollider(element.collider);
   });
 
-  this.resetLevel();
     this.index++;
 
     if(this.index == 2) {
@@ -116,6 +115,8 @@ class Play {
     this.actual0.y = this.levelArray[this.index].tileMap.actualY;
     this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
     this.actual0.x = 0;
+    this.resetLevel();
+    gameNs.game.deathTranslation.y = 0;
   }
 
   update() {
