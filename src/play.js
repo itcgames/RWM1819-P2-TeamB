@@ -7,6 +7,16 @@ class Play {
 
 	this.collisionManager = new CollisionManager();
 
+    this.backgroundSprite = new Sprite( gameNs.game.assetManager.getAsset("assets/sprites/background.png"),
+                                        1920,
+                                        1080,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        gameNs.game.ctx);
+    this.backgroundSprite.setScale(3, 2);
+
     this.levelArray = [];
     this.levelArray.push(new Level("level1"));
     this.levelArray.push(new Level("level2"));
@@ -26,21 +36,21 @@ class Play {
 
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
-    this.collisionManager.addCircleCollider(this.levelArray[0].goal.collider);
+    this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
 
     this.offSet = new Vector2(0, 0);
     this.actualCentre = new Vector2(0, 0);
     this.actual0 = new Vector2(0, -1000);
 
-    this.levelArray[0].enemies.forEach(enemy => {
+    this.levelArray[this.index].enemies.forEach(enemy => {
       this.collisionManager.addCircleCollider(enemy.collider);
     });
 
-    this.levelArray[0].platforms.forEach(platform => {
+    this.levelArray[this.index].platforms.forEach(platform => {
       this.collisionManager.addBoxCollider(platform.collider);
     });
 
-    this.levelArray[0].sawBlades.forEach(sawBlade => {
+    this.levelArray[this.index].sawBlades.forEach(sawBlade => {
       this.collisionManager.addCircleCollider(sawBlade.collider);
     })
 
@@ -69,10 +79,12 @@ class Play {
       });
 
       this.resetLevel();
+
     }
-
-
     this.index++;
+
+    this.player.nextLevel(this.levelArray[this.index].tileMap.playerX,
+    this.levelArray[this.index].tileMap.playerY);
 
 
     for (var i = 0; i < this.levelArray[this.index].tileMap.height; i++) {
@@ -82,9 +94,17 @@ class Play {
         }
       });
     }
-    this.player.circle.shape.position.x = 200;
-    this.player.circle.shape.position.y = 500;
-    this.actual0.y = -200;
+
+    this.levelArray[this.index].enemies.forEach(enemy => {
+      this.collisionManager.addCircleCollider(enemy.collider);
+    });
+
+    this.levelArray[this.index].sawBlades.forEach(sawBlade => {
+      this.collisionManager.addCircleCollider(sawBlade.collider);
+    })
+
+    this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
+
     this.ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 
@@ -107,7 +127,15 @@ class Play {
     for (var j = 0; j < circleCollisionResults.length; j++) {
       if (circleCollisionResults[CollisionManager.IndexOfElement(this.collisionManager.circleColliderArray, this.player.circle)][j] == true) {
         if (!this.collisionManager.circleColliderArray[j].containsObjectTag('goal')) {
-          this.player.handleCollision(this.collisionManager.circleColliderArray[j]);
+          this.ctx.translate(-this.actual0.x, (this.player.circle.position.y - this.levelArray[this.index].tileMap.yOffset));
+          this.actual0.x = 0;
+          this.wallOfDeath.collider.position.x = 0;
+          this.actual0.y = this.levelArray[this.index].tileMap.actualY;
+          this.player.handleCollision(
+            this.collisionManager.circleColliderArray[j],
+            this.levelArray[this.index].tileMap.playerX,
+            this.levelArray[this.index].tileMap.playerY
+          );
         } else {
           this.nextLevel();
         }
@@ -144,9 +172,11 @@ class Play {
 
   render(ctx) {
     this.ctx = ctx;
+    this.actual0.x--;
     ctx.translate(-1, this.offSet.y);
     gameNs.game.relativeCanvas.x++;
     //this.collisionManager.render(ctx);
+    this.backgroundSprite.draw();
     this.levelArray[this.index].render();
     ctx.restore();
   }

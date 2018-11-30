@@ -12,6 +12,10 @@ class TileMap
         this.height = levels[level].height; //height in number of tiles
         this.tileWidth = levels[level].tilewidth; //width in pixels of individual tiles
         this.tileHeight = levels[level].tileheight; //height in pixels of individual tile
+        this.playerX = levels[level].playerX;
+        this.playerY = levels[level].playerY;
+        this.yOffset = levels[level].yOffset;
+        this.actualY = levels[level].actualY;
         this.frameLeft = 0;
         this.frameTop = 0;
         this.tileTypes = Object.freeze({'Air':0, 'Grass':26, 'Dirt':30, 'Right lip':18, 'Left lip':25});

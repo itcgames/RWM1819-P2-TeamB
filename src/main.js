@@ -13,6 +13,7 @@ function main() {
   gameNs.game.assetManager.queueDownload("assets/levelAssets/PNG Metal/slice03_03.png");
   gameNs.game.assetManager.queueDownload("assets/sprites/endGoal.png");
   gameNs.game.assetManager.queueDownload("assets/sprites/saw.png");
+  gameNs.game.assetManager.queueDownload("assets/sprites/background.png");
 
   gameNs.game.assetManager.downloadAll(function () {
     gameNs.game.init();
