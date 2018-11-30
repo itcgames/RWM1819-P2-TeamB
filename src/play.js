@@ -7,6 +7,16 @@ class Play {
 
     this.collisionManager = new CollisionManager();
 
+    this.backgroundSprite = new Sprite( gameNs.game.assetManager.getAsset("assets/sprites/background.png"),
+                                        1920,
+                                        1080,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        gameNs.game.ctx);
+    this.backgroundSprite.setScale(3, 2);
+
     this.levelArray = [];
     this.levelArray.push(new Level("level1"));
     this.levelArray.push(new Level("level2"));
@@ -27,17 +37,17 @@ class Play {
     this.player = new Player();
     this.player.init();
     this.collisionManager.addCircleCollider(this.player.circle);
-    this.collisionManager.addCircleCollider(this.levelArray[0].goal.collider);
+    this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
 
     this.offSet = new Vector2(0, 0);
     this.actualCentre = new Vector2(0, 0);
     this.actual0 = new Vector2(0, -1000);
 
-    this.levelArray[0].enemies.forEach(enemy => {
+    this.levelArray[this.index].enemies.forEach(enemy => {
       this.collisionManager.addCircleCollider(enemy.collider);
     });
 
-    this.levelArray[0].sawBlades.forEach(sawBlade => {
+    this.levelArray[this.index].sawBlades.forEach(sawBlade => {
       this.collisionManager.addCircleCollider(sawBlade.collider);
     })
 
@@ -75,6 +85,17 @@ class Play {
         }
       });
     }
+
+    this.levelArray[this.index].enemies.forEach(enemy => {
+      this.collisionManager.addCircleCollider(enemy.collider);
+    });
+
+    this.levelArray[this.index].sawBlades.forEach(sawBlade => {
+      this.collisionManager.addCircleCollider(sawBlade.collider);
+    })
+
+    this.collisionManager.addCircleCollider(this.levelArray[this.index].goal.collider);
+
     this.player.circle.shape.position.x = 200;
     this.player.circle.shape.position.y = 500;
     this.actual0.y = -200;
@@ -131,6 +152,7 @@ class Play {
   render(ctx) {
     this.ctx = ctx;
     ctx.translate(-1, this.offSet.y);
+    this.backgroundSprite.draw();
     //this.collisionManager.render(ctx);
     this.levelArray[this.index].render();
     ctx.restore();
