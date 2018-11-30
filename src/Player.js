@@ -47,7 +47,7 @@ class Player
       this.jumpEmitter.setMaxParticles(100);
       this.jumpEmitter.setEmissionRate(100);
 
-      this.moveEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-1.5, 1), 10, 'rgb(0, 0, 255');
+      this.moveEmitter = new Emitter(new Vector(this.circle.position.x, this.circle.position.y), Vector.fromAngle(-0.5, 0.5), 10, 'rgb(0, 0, 255');
       this.moveEmitter.setMaxParticles(1000);
       this.moveEmitter.setEmissionRate(1);
       
@@ -225,7 +225,7 @@ class Player
 
     this.pm.update();
   }
-}
+
 
   render()
   {
